@@ -149,10 +149,11 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
 </div>
 
 <div class="app" id="main-app" style="display:none;">
-  <div class="app-title"> <button class="btn" onclick="downloadExcel()">Download Excel</button>
-    Office Attendance
-    <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
-  </div>
+ <div class="app-title">
+  Office Attendance
+  <button class="btn" onclick="downloadExcel()">Download Excel</button>
+  <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
+</div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('registro',this)">Daily Log</button>
     <button class="tab" onclick="showTab('overview',this)">Monthly Overview</button>
