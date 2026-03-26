@@ -218,7 +218,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
 function checkPassword() {
   const input = document.getElementById("password-input").value;
 
- if (input === "Pleiapp!") {
+ if (input === "2026!Pleiapp") {
   document.getElementById("login-screen").style.display = "none";
   document.getElementById("loading-overlay").style.display = "flex";
 
@@ -654,9 +654,6 @@ function renderPerfiles() {
       </div>
       <div class="profile-body">
         <div class="profile-field"><label>Key Number</label><input type="text" value="${pr.keyNumber||''}" placeholder="Ej: EMP-001" onchange="updateProfile('${esc(emp)}','keyNumber',this.value)"></div>
-        <div class="profile-field"><label>Job</label><input type="text" value="${pr.position||''}" placeholder="Job or Role" onchange="updateProfile('${esc(emp)}','position',this.value)"></div>
-        <div class="profile-field"><label>Email</label><input type="email" value="${pr.email||''}" placeholder="email@empresa.com" onchange="updateProfile('${esc(emp)}','email',this.value)"></div>
-        <div class="profile-field"><label>Phone Number</label><input type="text" value="${pr.phone||''}" placeholder="+54 11 ..." onchange="updateProfile('${esc(emp)}','phone',this.value)"></div>
         <div class="profile-field"><label>Notes</label><input type="text" value="${pr.notes||''}" placeholder="Notes..." onchange="updateProfile('${esc(emp)}','notes',this.value)"></div>
       </div>
       ${histHTML}
