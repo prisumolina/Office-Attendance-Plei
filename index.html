@@ -149,7 +149,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
 </div>
 
 <div class="app" id="main-app" style="display:none;">
-  <div class="app-title">
+  <div class="app-title"> <button class="btn" onclick="downloadExcel()">Download Excel</button>
     Office Attendance
     <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
   </div>
@@ -731,7 +731,35 @@ function renderAll() {
   if (document.getElementById('tab-horarios').classList.contains('active')) renderSchedule();
   if (document.getElementById('tab-perfiles').classList.contains('active')) renderPerfiles();
 }
+window.downloadExcel = function() {
+  let rows = [];
 
+  rows.push(["Employee","Date","Status","Month","Year"]);
+
+  Object.keys(state.attendance).forEach(monthKey => {
+    const [year, month] = monthKey.split('-');
+
+    Object.keys(state.attendance[monthKey]).forEach(emp => {
+      const days = state.attendance[monthKey][emp];
+
+      Object.keys(days).forEach(date => {
+        rows.push([emp, date, days[date], month, year]);
+      });
+    });
+  });
+
+  const csv = rows.map(r => r.join(",")).join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "attendance.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+};
 // ── Init ─────────────────────────────────────────────────────────
 window.startApp = startListener;
 </script>
