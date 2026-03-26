@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office Attendance</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: #f5f4f0; color: #1a1a18; }
+:root {
+  --bg: #ffffff; --bg2: #f1efe8; --bg3: #f5f4f0;
+  --txt: #1a1a18; --txt2: #5f5e5a; --txt3: #9a9890;
+  --brd: rgba(0,0,0,0.12); --brd2: rgba(0,0,0,0.22);
+  --radius: 8px; --radius-lg: 12px;
+  --green: #639922; --green-bg: #EAF3DE; --green-brd: #C0DD97;
+  --red: #E24B4A; --red-bg: #FCEBEB; --red-brd: #F7C1C1;
+  --amber: #BA7517; --amber-bg: #FAEEDA; --amber-brd: #FAC775;
+  --blue: #185FA5; --blue-bg: #E6F1FB; --blue-brd: #B5D4F4;
+  --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-brd: #9FE1CB;
+  --purple: #534AB7; --purple-bg: #EEEDFE; --purple-brd: #CECBF6;
+  --coral: #993C1D; --coral-bg: #FAECE7; --coral-brd: #F5C4B3;
+  --navy: #1a3a5c; --navy-bg: #e8f0f8; --navy-brd: #a8c4dc;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e1c; --bg2: #2a2a28; --bg3: #161614;
+    --txt: #f0ede6; --txt2: #9a9890; --txt3: #6a6860;
+    --brd: rgba(255,255,255,0.1); --brd2: rgba(255,255,255,0.2);
+  }
+  body { background: var(--bg3); }
+}
+.app { padding: 1.5rem; max-width: 1280px; margin: 0 auto; }
+.app-title { font-size: 20px; font-weight: 600; margin-bottom: 1.25rem; color: var(--txt); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sync-badge { font-size: 11px; font-weight: 400; padding: 2px 10px; border-radius: 10px; }
+.sync-ok    { background: var(--green-bg); color: var(--green); }
+.sync-wait  { background: var(--amber-bg); color: var(--amber); }
+.sync-err   { background: var(--red-bg);   color: var(--red); }
+.sync-load  { background: var(--bg2);      color: var(--txt2); }
+.tabs { display: flex; gap: 0; border-bottom: 0.5px solid var(--brd); margin-bottom: 1.5rem; overflow-x: auto; }
+.tab { padding: 8px 16px; font-size: 13px; cursor: pointer; border: none; background: none; color: var(--txt2); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; font-family: inherit; }
+.tab.active { color: var(--txt); border-bottom-color: var(--txt); font-weight: 500; }
+.tab:hover:not(.active) { color: var(--txt); }
+.section { display: none; }
+.section.active { display: block; }
+.month-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.month-title { font-size: 17px; font-weight: 500; color: var(--txt); }
+.btn { border: 0.5px solid var(--brd2); background: none; padding: 5px 11px; border-radius: var(--radius); cursor: pointer; font-size: 12px; color: var(--txt2); font-family: inherit; }
+.btn:hover { background: var(--bg2); }
+.btn-primary { background: var(--txt); color: var(--bg); border-color: var(--txt); }
+.btn-primary:hover { opacity: 0.85; background: var(--txt); }
+input, select { background: var(--bg); color: var(--txt); border: 0.5px solid var(--brd2); border-radius: var(--radius); font-family: inherit; font-size: 13px; }
+input:focus, select:focus { outline: none; border-color: var(--blue); }
+.grid-container { overflow-x: auto; padding-bottom: 4px; }
+table.att { border-collapse: collapse; min-width: 100%; font-size: 12px; }
+table.att th { padding: 5px 7px; text-align: center; color: var(--txt2); font-weight: 400; border-bottom: 0.5px solid var(--brd); white-space: nowrap; }
+table.att th.emp-col { text-align: left; min-width: 150px; }
+table.att td { padding: 3px 5px; border-bottom: 0.5px solid var(--brd); text-align: center; }
+table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; color: var(--txt); white-space: nowrap; padding-left: 4px; }
+.cell-btn { width: 32px; height: 26px; border-radius: 4px; border: 0.5px solid var(--brd); background: var(--bg2); cursor: pointer; font-size: 10px; color: var(--txt3); display: inline-flex; align-items: center; justify-content: center; transition: all 0.1s; font-family: inherit; }
+.cell-btn.presente    { background: var(--green-bg); border-color: var(--green-brd); color: var(--green); font-weight: 700; }
+.cell-btn.ausente     { background: var(--red-bg);   border-color: var(--red-brd);   color: var(--red);   font-weight: 700; }
+.cell-btn.justificado { background: var(--amber-bg); border-color: var(--amber-brd); color: var(--amber); font-weight: 700; }
+.cell-btn.remoto      { background: var(--blue-bg);  border-color: var(--blue-brd);  color: var(--blue);  font-weight: 700; }
+.week-sep { border-left: 1px solid var(--brd2) !important; }
+.legend { display: flex; gap: 14px; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--txt2); }
+.legend-dot { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+.target-row { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--txt2); }
+.target-row input { width: 48px; padding: 4px 7px; text-align: center; }
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 14px; }
+.emp-card { background: var(--bg); border: 0.5px solid var(--brd); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+.emp-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+.stat-box { background: var(--bg2); border-radius: var(--radius); padding: 7px 6px; text-align: center; }
+.stat-num { font-size: 18px; font-weight: 600; }
+.stat-label { font-size: 9px; color: var(--txt2); margin-top: 1px; text-transform: uppercase; letter-spacing: 0.3px; }
+.progress-bar { height: 5px; border-radius: 3px; background: var(--brd); overflow: hidden; margin-bottom: 3px; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.pct-label { font-size: 11px; color: var(--txt2); display: flex; justify-content: space-between; }
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-red   { background: var(--red-bg);   color: var(--red); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); }
+.justif-section { margin-top: 10px; border-top: 0.5px solid var(--brd); padding-top: 9px; }
+.justif-title { font-size: 10px; color: var(--txt2); margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+.justif-item { font-size: 12px; color: var(--txt); padding: 4px 0; border-bottom: 0.5px solid var(--brd); display: flex; gap: 7px; align-items: center; }
+.justif-item:last-child { border-bottom: none; }
+.add-justif { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+.add-justif input, .add-justif select { padding: 4px 7px; font-size: 12px; }
+.del-btn { border: none; background: none; color: var(--txt3); cursor: pointer; font-size: 15px; padding: 0 2px; opacity: 0.5; line-height: 1; font-family: inherit; }
+.del-btn:hover { opacity: 1; color: var(--red); }
+.schedule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(265px, 1fr)); gap: 14px; }
+.sched-card { background: var(--bg); border: 0.5px solid var(--brd); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+.day-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+.day-chip { padding: 4px 9px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--brd2); color: var(--txt2); background: none; transition: all 0.12s; font-family: inherit; }
+.day-chip.active { background: var(--green-bg); border-color: var(--green-brd); color: var(--green); }
+.field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12px; color: var(--txt2); }
+.field-row input { flex: 1; padding: 4px 8px; font-size: 12px; }
+.field-row label { min-width: 58px; }
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+.profile-card { background: var(--bg); border: 0.5px solid var(--brd); border-radius: var(--radius-lg); overflow: hidden; }
+.profile-header { padding: 1rem 1.25rem; border-bottom: 0.5px solid var(--brd); display: flex; align-items: center; gap: 12px; }
+.profile-body { padding: 1rem 1.25rem 0.5rem; }
+.profile-field { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+.profile-field label { min-width: 88px; color: var(--txt2); }
+.profile-field input { flex: 1; padding: 4px 8px; }
+.history-section { padding: 0 1.25rem 1rem; }
+.history-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--txt2); margin-bottom: 8px; border-top: 0.5px solid var(--brd); padding-top: 10px; }
+.history-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.history-table th { padding: 4px 8px; text-align: left; color: var(--txt2); font-weight: 500; border-bottom: 0.5px solid var(--brd); font-size: 10px; }
+.history-table td { padding: 5px 8px; border-bottom: 0.5px solid var(--brd); color: var(--txt); }
+.history-table tr:last-child td { border-bottom: none; }
+.pct-pill { display: inline-block; padding: 1px 7px; border-radius: 10px; font-weight: 500; font-size: 10px; }
+.loading-overlay { position: fixed; inset: 0; background: var(--bg3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 999; }
+.loading-overlay p { color: var(--txt2); font-size: 14px; }
+.spinner { width: 28px; height: 28px; border: 2px solid var(--brd2); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="login-screen" style="
+  position: fixed;
+  inset: 0;
+  background: #f5f4f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+">
+  <div style="background:white;padding:30px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:center;min-width:280px;">
+    <h2 style="margin-bottom:15px;">Access</h2>
+    <input 
+      type="password" 
+      id="password-input" 
+      placeholder="Enter password"
+      style="padding:10px;width:100%;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;"
+      onkeydown="if(event.key==='Enter')checkPassword()"
+    >
+    <button onclick="checkPassword()" style="padding:10px 15px;border:none;background:black;color:white;border-radius:8px;cursor:pointer;width:100%;">
+      Access
+    </button>
+    <p id="error-msg" style="color:red;font-size:12px;margin-top:8px;display:none;">Incorrect password</p>
+  </div>
+</div>
+<!-- Loading screen -->
+<div class="loading-overlay" id="loading-overlay" style="display:none;">
+  <div class="spinner"></div>
+  <p>Connecting to database...</p>
+</div>
+
+<div class="app" id="main-app" style="display:none;">
+  <div class="app-title">
+    Office Attendance
+    <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('registro',this)">Daily Log</button>
+    <button class="tab" onclick="showTab('overview',this)">Monthly Overview</button>
+    <button class="tab" onclick="showTab('horarios',this)">Scheduled Days</button>
+    <button class="tab" onclick="showTab('perfiles',this)">Profiles</button>
+  </div>
+
+  <div id="tab-registro" class="section active">
+    <div class="month-header">
+      <div style="display:flex;gap:4px;align-items:center;">
+        <button class="btn" onclick="changeMonth(-1)">&#8249;</button>
+        <span class="month-title" id="month-label-registro"></span>
+        <button class="btn" onclick="changeMonth(1)">&#8250;</button>
+      </div>
+      <button class="btn" onclick="newMonth()">+ New month</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center;">
+      <input type="text" id="new-emp-name" placeholder="Employee name..." style="padding:6px 10px;width:230px;" onkeydown="if(event.key==='Enter')addEmployee()">
+      <button class="btn btn-primary" onclick="addEmployee()">+ Add employee</button>
+    </div>
+    <div class="grid-container">
+      <table class="att"><thead id="table-head"></thead><tbody id="table-body"></tbody></table>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green-bg);border:0.5px solid var(--green-brd);"></div>Present</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue-bg);border:0.5px solid var(--blue-brd);"></div>Remote</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber-bg);border:0.5px solid var(--amber-brd);"></div>Justified</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red-bg);border:0.5px solid var(--red-brd);"></div>Absent</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--bg2);border:0.5px solid var(--brd);"></div>Not marked</div>
+      <span style="font-size:11px;color:var(--txt3);margin-left:4px;">· Click to cycle</span>
+    </div>
+  </div>
+
+  <div id="tab-overview" class="section">
+    <div class="month-header">
+      <div style="display:flex;gap:4px;align-items:center;">
+        <button class="btn" onclick="changeMonthOv(-1)">&#8249;</button>
+        <span class="month-title" id="month-label-overview"></span>
+        <button class="btn" onclick="changeMonthOv(1)">&#8250;</button>
+      </div>
+      <span style="font-size:12px;color:var(--txt2);" id="overview-meta-label"></span>
+    </div>
+    <div class="overview-grid" id="overview-cards"></div>
+  </div>
+
+  <div id="tab-horarios" class="section">
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:15px;font-weight:500;color:var(--txt);">Fixed attendance settings</div>
+      <p style="font-size:12px;color:var(--txt2);margin-top:4px;">Agreed working days and schedule per employee.</p>
+    </div>
+    <div class="schedule-grid" id="schedule-cards"></div>
+  </div>
+
+  <div id="tab-perfiles" class="section">
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:15px;font-weight:500;color:var(--txt);">Employee profiles</div>
+      <p style="font-size:12px;color:var(--txt2);margin-top:4px;">Personal info, key number, schedule and monthly history.</p>
+    </div>
+    <div class="profile-grid" id="profile-cards"></div>
+  </div>
+</div>
+<script>
+function checkPassword() {
+  const input = document.getElementById("password-input").value;
+
+ if (input === "Pleiapp!") {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("loading-overlay").style.display = "flex";
+
+  if (window.startApp) {
+    window.startApp();
+  }
+} else {
+    document.getElementById("error-msg").style.display = "block";
+  }
+}
+</script>
+<!-- Firebase SDK via CDN (no npm needed) -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ── Firebase config ──────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyB5QaQGSkrl-GhmiALB4VPcaop-7JSjnNw",
+  authDomain: "presencialidad-oficina.firebaseapp.com",
+  projectId: "presencialidad-oficina",
+  storageBucket: "presencialidad-oficina.firebasestorage.app",
+  messagingSenderId: "125044845231",
+  appId: "1:125044845231:web:72e367e4edfbab1e78425a"
+};
+// ─────────────────────────────────────────────────────────────────
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const DB_DOC = doc(db, "presencialidad", "main");
+
+const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WEEKDAYS  = ['Mon','Tue','Wed','Thu','Fri'];
+const STATES = ['none','presente','remoto','justificado','ausente'];
+const COLORS    = ['blue','teal','purple','coral','amber','navy'];
+
+const makeDefault = () => ({
+  currentMonth:  new Date().getMonth(),
+  currentYear:   new Date().getFullYear(),
+  overviewMonth: new Date().getMonth(),
+  overviewYear:  new Date().getFullYear(),
+  target: 12,
+  targets: {},
+  employees: [],
+  attendance: {},
+  justifications: {},
+  schedule: {},
+  profiles: {}
+});
+
+let state = makeDefault();
+let saveTimer = null;
+let saving = false;
+
+// ── Sync badge helpers ───────────────────────────────────────────
+function badge(cls, txt) {
+  const el = document.getElementById('sync-badge');
+  el.className = 'sync-badge ' + cls;
+  el.textContent = txt;
+}
+
+// ── Save to Firestore ────────────────────────────────────────────
+function saveState() {
+  clearTimeout(saveTimer);
+  badge('sync-wait', 'Saving...');
+  saveTimer = setTimeout(async () => {
+    try {
+      saving = true;
+      await setDoc(DB_DOC, state);
+      badge('sync-ok', '✓ Synced');
+      setTimeout(() => badge('sync-ok', '● En línea'), 2000);
+    } catch(e) {
+      badge('sync-err', '⚠ Error saving');
+      console.error(e);
+    } finally { saving = false; }
+  }, 600);
+}
+
+// ── Real-time listener: updates UI when anyone changes data ──────
+function startListener() {
+  onSnapshot(DB_DOC, (snap) => {
+    if (saving) return; // skip our own writes mid-flight
+    if (snap.exists()) {
+      const remote = snap.data();
+      state = Object.assign(makeDefault(), remote);
+      const targetInput = document.getElementById('target-input'); if (targetInput) targetInput.value = state.target || 12;
+      renderAll();
+    }
+    badge('sync-ok', '● En línea');
+    document.getElementById('loading-overlay').style.display = 'none';
+    document.getElementById('main-app').style.display = 'block';
+  }, (err) => {
+    badge('sync-err', '⚠ Offline');
+    console.error(err);
+    document.getElementById('loading-overlay').innerHTML = `
+      <p style="color:var(--red);font-size:14px;">Could not connect to the database.</p>
+      <p style="color:var(--txt2);font-size:12px;margin-top:6px;">Check your internet connection and refresh the page.</p>`;
+  });
+}
+
+// ── Helpers ──────────────────────────────────────────────────────
+function monthKey(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
+
+function getWorkdays(year, month) {
+  const days = [], d = new Date(year, month, 1);
+  while (d.getMonth() === month) {
+    if (d.getDay() !== 0 && d.getDay() !== 6) days.push(new Date(d));
+    d.setDate(d.getDate()+1);
+  }
+  return days;
+}
+
+function getWeekNum(date) {
+  let week = 0;
+  const cur = new Date(date.getFullYear(), date.getMonth(), 1);
+  while (cur <= date) {
+    if (cur.getDay() === 1 || cur.getDate() === 1) week++;
+    cur.setDate(cur.getDate()+1);
+  }
+  return week;
+}
+
+function initEmp(emp) {
+  const mk = monthKey(state.currentYear, state.currentMonth);
+  if (!state.attendance[mk])             state.attendance[mk] = {};
+  if (!state.targets[emp]) state.targets[emp] = 12;
+  if (!state.attendance[mk][emp])        state.attendance[mk][emp] = {};
+  if (!state.justifications[mk])         state.justifications[mk] = {};
+  if (!state.justifications[mk][emp])    state.justifications[mk][emp] = [];
+  if (!state.schedule[emp])             state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
+  if (!state.profiles[emp])             state.profiles[emp] = { keyNumber:'', email:'', phone:'', position:'', notes:'' };
+}
+
+function getInitials(name) {
+  const parts = name.split(/[,\s]+/).filter(Boolean);
+  return parts.length >= 2 ? (parts[0][0]+(parts[1][0]||'')).toUpperCase() : name.slice(0,2).toUpperCase();
+}
+function safeId(s)  { return s.replace(/[^a-zA-Z0-9]/g,'_'); }
+function esc(s)     { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+// ── Registro diario ──────────────────────────────────────────────
+window.cycleCell = function(emp, ds) {
+  const mk = monthKey(state.currentYear, state.currentMonth);
+  initEmp(emp);
+  const cur = state.attendance[mk][emp][ds] || 'none';
+  state.attendance[mk][emp][ds] = STATES[(STATES.indexOf(cur)+1) % STATES.length];
+  saveState(); renderRegistro();
+};
+
+function renderRegistro() {
+  const mk   = monthKey(state.currentYear, state.currentMonth);
+  const days = getWorkdays(state.currentYear, state.currentMonth);
+  document.getElementById('month-label-registro').textContent = `${MONTHS_EN[state.currentMonth]} ${state.currentYear}`;
+
+  let weeks = [], cw = null;
+  days.forEach(d => {
+    const wn = getWeekNum(d);
+    if (!cw || cw.wn !== wn) { cw = {wn, days:[]}; weeks.push(cw); }
+    cw.days.push(d);
+  });
+
+  let wRow = '<tr><th class="emp-col">Empleado</th>';
+  weeks.forEach(w => { wRow += `<th colspan="${w.days.length}" class="week-sep" style="font-size:10px;color:var(--txt3);">Sem ${w.wn}</th>`; });
+  wRow += '<th style="border-left:1px solid var(--brd2);font-size:10px;" title="Presente">P</th><th style="font-size:10px;" title="Remoto">R</th><th style="font-size:10px;" title="Total presencial">Tot</th></tr>';
+
+  let dRow = '<tr><th class="emp-col"></th>';
+  weeks.forEach(w => {
+    w.days.forEach((d,i) => {
+      dRow += `<th${i===0?' class="week-sep"':''}>${WEEKDAYS[d.getDay()-1]}<br><span style="font-size:9px;">${d.getDate()}</span></th>`;
+    });
+  });
+  dRow += '<th style="border-left:1px solid var(--brd2);"></th><th></th><th></th></tr>';
+  document.getElementById('table-head').innerHTML = wRow + dRow;
+
+  let bHTML = '';
+state.employees.forEach(emp => {
+  const T = state.targets[emp] || 12;
+  initEmp(emp);
+    initEmp(emp);
+    const att = state.attendance[monthKey(state.currentYear, state.currentMonth)][emp] || {};
+    let pres = 0, rem = 0;
+    let row = `<tr><td class="emp-name">${emp} <button class="del-btn" onclick="removeEmployee('${esc(emp)}')">×</button></td>`;
+    weeks.forEach(w => {
+      w.days.forEach((d,i) => {
+        const ds = d.toISOString().slice(0,10);
+        const st = att[ds] || 'none';
+        if (st==='presente') pres++;
+        if (st==='remoto')   rem++;
+        const lbl = st==='presente'?'✓':st==='ausente'?'✗':st==='justificado'?'J':st==='remoto'?'R':'·';
+        row += `<td${i===0?' class="week-sep"':''}><button class="cell-btn ${st==='none'?'':st}" onclick="cycleCell('${esc(emp)}','${ds}')">${lbl}</button></td>`;
+      });
+    });
+    const cc = pres>=T?'var(--green)':pres>=Math.round(T*0.7)?'var(--amber)':'var(--red)';
+    row += `<td style="border-left:1px solid var(--brd2);font-weight:600;font-size:12px;color:var(--green);">${pres}</td>`;
+    row += `<td style="font-weight:600;font-size:12px;color:var(--blue);">${rem}</td>`;
+    row += `<td style="font-weight:600;font-size:12px;color:${cc};">${pres}</td></tr>`;
+    bHTML += row;
+  });
+  document.getElementById('table-body').innerHTML = bHTML;
+}
+
+// ── Overview mensual ─────────────────────────────────────────────
+function renderOverview() {
+  const y = state.overviewYear, m = state.overviewMonth;
+  const mk   = monthKey(y, m);
+  const days = getWorkdays(y, m);
+  const T    = state.target || 12;
+  document.getElementById('month-label-overview').textContent = `${MONTHS_EN[m]} ${y}`;
+
+  let html = '';
+  state.employees.forEach((emp, idx) => {
+  const T = state.targets[emp] || 12;
+    const att     = ((state.attendance[mk]||{})[emp]) || {};
+    const justifs = ((state.justifications[mk]||{})[emp]) || [];
+    let pres=0,rem=0,ausen=0,just=0,ausDays=[];
+    days.forEach(d => {
+      const ds = d.toISOString().slice(0,10), st = att[ds];
+      if (st==='presente')    pres++;
+      else if (st==='remoto') rem++;
+      else if (st==='ausente')     { ausen++; ausDays.push(d); }
+      else if (st==='justificado') { just++;  ausDays.push(d); }
+    });
+    const total    = pres+just;
+    const pct      = Math.round((total/T)*100);
+    const col      = COLORS[idx % COLORS.length];
+    const ini      = getInitials(emp);
+    const barCol   = total>=T?'var(--green)':total>=Math.round(T*0.7)?'var(--amber)':'var(--red)';
+    const badgeCls = total>=T?'badge-green':total>=Math.round(T*0.7)?'badge-amber':'badge-red';
+    const badgeTxt = total>=T?'Target met':'Below target';
+    const eid      = safeId(emp);
+    const ausTxt   = ausDays.map(d=>`${WEEKDAYS[d.getDay()-1]} ${d.getDate()}`).join(', ');
+
+    let jHTML = '';
+    if (justifs.length>0) {
+      jHTML = '<div class="justif-section"><div class="justif-title">Justificaciones</div>';
+      justifs.forEach((j,i) => {
+        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Rec.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${mk}')">×</button></div>`;
+      });
+      jHTML += '</div>';
+    }
+
+    html += `<div class="emp-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div class="emp-avatar" style="background:var(--${col}-bg);color:var(--${col});">${ini}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px;color:var(--txt);">${emp}</div>
+          <div style="margin-top:3px;"><span class="badge ${badgeCls}">${badgeTxt}</span></div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num" style="color:var(--green);">${pres}</div><div class="stat-label">Present</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--blue);">${rem}</div><div class="stat-label">Remote</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--amber);">${just}</div><div class="stat-label">Justified</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--red);">${ausen}</div><div class="stat-label">Absent</div></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:${barCol};"></div></div>
+      <div class="pct-label"><span>Office attendance: <strong>${pct}%</strong></span><span>${total}/${T} days</span></div>
+      ${ausDays.length>0?`<div style="margin-top:7px;font-size:11px;color:var(--txt2);">absences: ${ausTxt}</div>`:''}
+      ${jHTML}
+      <div class="justif-section">
+        <div class="justif-title">Add justification</div>
+        <div class="add-justif">
+          <input type="text" id="jdate-${eid}" placeholder="Date" style="width:88px;">
+          <input type="text" id="jmot-${eid}" placeholder="Reason..." style="flex:1;min-width:90px;">
+          <select id="jrec-${eid}" style="font-size:11px;padding:3px 5px;"><option value="no">Not made up</option><option value="si">Made up</option></select>
+          <button class="btn" style="font-size:12px;padding:3px 8px;" onclick="addJustif('${esc(emp)}','${mk}')">+</button>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('overview-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No hay empleados cargados.</p>';
+}
+
+window.addJustif = function(emp, mk) {
+  const id = safeId(emp);
+  const date   = document.getElementById(`jdate-${id}`)?.value.trim();
+  const motivo = document.getElementById(`jmot-${id}`)?.value.trim();
+  const recupero = document.getElementById(`jrec-${id}`)?.value === 'si';
+  if (!date || !motivo) return;
+  if (!state.justifications[mk])      state.justifications[mk] = {};
+  if (!state.justifications[mk][emp]) state.justifications[mk][emp] = [];
+  state.justifications[mk][emp].push({date, motivo, recupero});
+  saveState(); renderOverview();
+};
+
+window.removeJustifOv = function(emp, idx, mk) {
+  state.justifications[mk]?.[emp]?.splice(idx,1);
+  saveState(); renderOverview();
+};
+
+// ── Días acordados ───────────────────────────────────────────────
+function renderSchedule() {
+  const days = ['Mon','Tue','Wed','Thu','Fri'];
+  let html = '';
+
+  state.employees.forEach((emp,idx) => {
+  const T = state.targets[emp] || 12;
+    if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
+
+    const sc  = state.schedule[emp];
+    const col = COLORS[idx % COLORS.length];
+    const ini = getInitials(emp);
+
+    const chips = days.map(d =>
+      `<button class="day-chip ${sc.days.includes(d)?'active':''}" onclick="toggleDay('${esc(emp)}','${d}')">${d}</button>`
+    ).join('');
+
+    html += `<div class="sched-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div class="emp-avatar" style="background:var(--${col}-bg);color:var(--${col});">${ini}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px;color:var(--txt);">${emp}</div>
+
+          <div style="font-size:11px;color:var(--txt2);">
+            ${['Mon','Tue','Wed','Thu','Fri'].filter(d => sc.days.includes(d)).length}
+            ${['Mon','Tue','Wed','Thu','Fri'].filter(d => sc.days.includes(d)).length === 1 ? 'day' : 'days'}/week
+          </div>
+
+          <div style="margin-top:6px;font-size:11px;color:var(--txt2);">
+            Target:
+            <input type="number" 
+              value="${state.targets[emp] || 12}" 
+              style="width:50px;padding:2px 4px;margin-left:4px;"
+              onchange="updateEmpTarget('${esc(emp)}', this.value)">
+          </div>
+
+        </div>
+        <button class="del-btn" onclick="removeEmployee('${esc(emp)}')">×</button>
+      </div>
+
+      <div class="day-chips">${chips}</div>
+
+      <div class="field-row">
+        <label>Start Time:</label>
+        <input type="time" value="${sc.timeStart||''}" onchange="updateSchedule('${esc(emp)}','timeStart',this.value)">
+      </div>
+
+      <div class="field-row">
+        <label>End time:</label>
+        <input type="time" value="${sc.timeEnd||''}" onchange="updateSchedule('${esc(emp)}','timeEnd',this.value)">
+      </div>
+
+      <div class="field-row">
+        <label>Notes:</label>
+        <input type="text" value="${sc.notes||''}" onchange="updateSchedule('${esc(emp)}','notes',this.value)">
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('schedule-cards').innerHTML = html || '<p>No employees.</p>';
+}
+
+window.toggleDay = function(emp, day) {
+  if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
+  const idx = state.schedule[emp].days.indexOf(day);
+  if (idx===-1) state.schedule[emp].days.push(day);
+  else          state.schedule[emp].days.splice(idx,1);
+  saveState(); renderSchedule();
+};
+
+window.updateSchedule = function(emp, field, val) {
+  if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
+  state.schedule[emp][field] = val;
+  saveState();
+};
+  window.updateEmpTarget = function(emp, val) {
+  state.targets[emp] = parseInt(val) || 0;
+  saveState();
+  renderAll();
+};
+
+// ── Perfiles ─────────────────────────────────────────────────────
+function renderPerfiles() {
+  let html = '';
+  state.employees.forEach((emp,idx) => {
+  const T = state.targets[emp] || 12;
+    if (!state.profiles[emp]) state.profiles[emp] = { keyNumber:'', email:'', phone:'', position:'', notes:'' };
+    if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
+    const pr  = state.profiles[emp];
+    const sc  = state.schedule[emp];
+    const col = COLORS[idx % COLORS.length];
+    const ini = getInitials(emp);
+
+    const allMks = Object.keys(state.attendance).sort();
+    let histHTML = '';
+    if (allMks.length > 0) {
+      histHTML = `<div class="history-section"><div class="history-title">Monthly report</div>
+        <table class="history-table">
+          <tr><th>Month</th><th style="color:var(--green);">P</th><th style="color:var(--blue);">R</th><th style="color:var(--amber);">J</th><th style="color:var(--red);">F</th><th>%</th></tr>`;
+      allMks.forEach(mk => {
+        const [y,m] = mk.split('-').map(Number);
+        const days  = getWorkdays(y, m-1);
+        const att   = ((state.attendance[mk])||{})[emp] || {};
+        const justifs = ((state.justifications[mk])||{})[emp] || [];
+        let pres=0,rem=0,ausen=0,just=0;
+        days.forEach(d => {
+          const st = att[d.toISOString().slice(0,10)];
+          if (st==='presente') pres++;
+          else if (st==='remoto') rem++;
+          else if (st==='ausente') ausen++;
+          else if (st==='justificado') just++;
+        });
+        const total  = pres+just;
+        const pct    = Math.round((total/T)*100);
+        const pctCol = total>=T?'var(--green)':total>=Math.round(T*0.7)?'var(--amber)':'var(--red)';
+        const pctBg  = total>=T?'var(--green-bg)':total>=Math.round(T*0.7)?'var(--amber-bg)':'var(--red-bg)';
+        histHTML += `<tr>
+          <td style="font-weight:500;">${MONTHS_EN[m-1]} ${y}</td>
+          <td style="color:var(--green);font-weight:500;">${pres}</td>
+          <td style="color:var(--blue);">${rem}</td>
+          <td style="color:var(--amber);">${just}</td>
+          <td style="color:var(--red);">${ausen}</td>
+          <td><span class="pct-pill" style="background:${pctBg};color:${pctCol};">${pct}%</span></td>
+        </tr>`;
+        justifs.forEach(j => {
+          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Recuperó':''}</td></tr>`;
+        });
+      });
+      histHTML += '</table></div>';
+    }
+
+    const horario       = sc.timeStart&&sc.timeEnd ? `${sc.timeStart} – ${sc.timeEnd}` : 'Not set';
+    const validDays = ['Mon','Tue','Wed','Thu','Fri'];  const cleanDays = sc.days.filter(d => validDays.includes(d));  const diasAcordados = cleanDays.length > 0    ? cleanDays.join(', ')   : 'Not set';
+
+    html += `<div class="profile-card">
+      <div class="profile-header">
+        <div class="emp-avatar" style="width:44px;height:44px;font-size:15px;background:var(--${col}-bg);color:var(--${col});">${ini}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:15px;color:var(--txt);">${emp}</div>
+          <div style="font-size:11px;color:var(--txt2);margin-top:2px;">${pr.position||'No Job'}</div>
+          <div style="font-size:11px;color:var(--txt2);">${horario} · ${diasAcordados}</div>
+        </div>
+      </div>
+      <div class="profile-body">
+        <div class="profile-field"><label>Key Number</label><input type="text" value="${pr.keyNumber||''}" placeholder="Ej: EMP-001" onchange="updateProfile('${esc(emp)}','keyNumber',this.value)"></div>
+        <div class="profile-field"><label>Job</label><input type="text" value="${pr.position||''}" placeholder="Job or Role" onchange="updateProfile('${esc(emp)}','position',this.value)"></div>
+        <div class="profile-field"><label>Email</label><input type="email" value="${pr.email||''}" placeholder="email@empresa.com" onchange="updateProfile('${esc(emp)}','email',this.value)"></div>
+        <div class="profile-field"><label>Phone Number</label><input type="text" value="${pr.phone||''}" placeholder="+54 11 ..." onchange="updateProfile('${esc(emp)}','phone',this.value)"></div>
+        <div class="profile-field"><label>Notes</label><input type="text" value="${pr.notes||''}" placeholder="Notes..." onchange="updateProfile('${esc(emp)}','notes',this.value)"></div>
+      </div>
+      ${histHTML}
+    </div>`;
+  });
+  document.getElementById('profile-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No employees</p>';
+}
+
+window.updateProfile = function(emp, field, val) {
+  if (!state.profiles[emp]) state.profiles[emp] = {};
+  state.profiles[emp][field] = val;
+  saveState();
+};
+
+// ── Empleados ────────────────────────────────────────────────────
+window.addEmployee = function() {
+  const input = document.getElementById('new-emp-name');
+  const name  = input.value.trim();
+  if (!name || state.employees.includes(name)) return;
+  state.employees.push(name);
+  input.value = '';
+  saveState(); renderAll();
+};
+
+window.removeEmployee = function(emp) {
+  if (!confirm(`¿Eliminar a ${emp}?`)) return;
+  state.employees = state.employees.filter(e=>e!==emp);
+  saveState(); renderAll();
+};
+
+window.changeMonth = function(dir) {
+  state.currentMonth += dir;
+  if (state.currentMonth<0)  { state.currentMonth=11; state.currentYear--;  }
+  if (state.currentMonth>11) { state.currentMonth=0;  state.currentYear++;  }
+  saveState(); renderRegistro();
+};
+
+window.changeMonthOv = function(dir) {
+  state.overviewMonth += dir;
+  if (state.overviewMonth<0)  { state.overviewMonth=11; state.overviewYear--;  }
+  if (state.overviewMonth>11) { state.overviewMonth=0;  state.overviewYear++;  }
+  saveState(); renderOverview();
+};
+
+window.updateTarget = function(val) {
+  state.target = parseInt(val)||12;
+  saveState(); renderRegistro();
+};
+
+window.newMonth = function() {
+  const mk = monthKey(state.currentYear, state.currentMonth);
+  if (!state.attendance[mk])    state.attendance[mk] = {};
+  if (!state.justifications[mk]) state.justifications[mk] = {};
+  state.employees.forEach(emp => {
+  const T = state.targets[emp] || 12;
+    if (!state.attendance[mk][emp])    state.attendance[mk][emp] = {};
+    if (!state.justifications[mk][emp]) state.justifications[mk][emp] = [];
+  });
+  saveState(); renderRegistro();
+};
+
+window.showTab = function(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  if (tab==='overview') renderOverview();
+  if (tab==='horarios') renderSchedule();
+  if (tab==='perfiles') renderPerfiles();
+};
+
+function renderAll() {
+  renderRegistro();
+  if (document.getElementById('tab-overview').classList.contains('active')) renderOverview();
+  if (document.getElementById('tab-horarios').classList.contains('active')) renderSchedule();
+  if (document.getElementById('tab-perfiles').classList.contains('active')) renderPerfiles();
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+window.startApp = startListener;
+</script>
+</body>
+</html>
