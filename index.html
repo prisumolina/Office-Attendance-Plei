@@ -151,7 +151,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
 <div class="app" id="main-app" style="display:none;">
  <div class="app-title">
   Office Attendance
-  <button class="btn" onclick="downloadExcel()">Download Excel</button>
+  <button class="btn" onclick="exportExcel()" style="border-color:var(--green);color:var(--green);">   ↓ Export Excel </button>
   <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
 </div>
   <div class="tabs">
@@ -232,7 +232,8 @@ function checkPassword() {
 }
 </script>
 <!-- Firebase SDK via CDN (no npm needed) -->
-<script type="module">
+
+  <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -732,37 +733,103 @@ function renderAll() {
   if (document.getElementById('tab-horarios').classList.contains('active')) renderSchedule();
   if (document.getElementById('tab-perfiles').classList.contains('active')) renderPerfiles();
 }
-window.downloadExcel = function() {
-  let rows = [];
+    window.exportExcel = function() {
+  if (typeof XLSX === 'undefined') {
+    alert('Excel not loaded yet');
+    return;
+  }
 
-  rows.push(["Employee","Date","Status","Month","Year"]);
+  const wb = XLSX.utils.book_new();
 
-  Object.keys(state.attendance).forEach(monthKey => {
-    const [year, month] = monthKey.split('-');
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    Object.keys(state.attendance[monthKey]).forEach(emp => {
-      const days = state.attendance[monthKey][emp];
+  // ── SHEET 1: DAILY LOG ──
+  const y = state.currentYear;
+  const m = state.currentMonth;
+  const mk = monthKey(y, m);
+  const days = getWorkdays(y, m);
 
-      Object.keys(days).forEach(date => {
-        rows.push([emp, date, days[date], month, year]);
+  const header = ['Employee', ...days.map(d => `${WEEKDAYS[d.getDay()-1]} ${d.getDate()}`), 'Present','Remote','Justified','Absent','Total','%'];
+
+  const rows = state.employees.map(emp => {
+    const T = state.targets[emp] || 12;
+    const att = ((state.attendance[mk]||{})[emp]) || {};
+
+    let pres=0, rem=0, just=0, aus=0;
+
+    const dayData = days.map(d => {
+      const st = att[d.toISOString().slice(0,10)];
+      if (st==='presente') pres++;
+      else if (st==='remoto') rem++;
+      else if (st==='justificado') just++;
+      else if (st==='ausente') aus++;
+      return st || '';
+    });
+
+    const total = pres + just;
+    const pct = Math.round((total/T)*100);
+
+    return [emp, ...dayData, pres, rem, just, aus, total, pct + '%'];
+  });
+
+  const ws1 = XLSX.utils.aoa_to_sheet([header, ...rows]);
+  XLSX.utils.book_append_sheet(wb, ws1, `${MONTHS[m]} ${y}`);
+
+  // ── SHEET 2: SUMMARY ──
+  const summary = [['Employee','Month','Present','Remote','Justified','Absent','Total','%']];
+
+  Object.keys(state.attendance).forEach(mk => {
+    const [yr, mo] = mk.split('-').map(Number);
+    const days2 = getWorkdays(yr, mo-1);
+
+    state.employees.forEach(emp => {
+      const T = state.targets[emp] || 12;
+      const att = ((state.attendance[mk])||{})[emp] || {};
+
+      let pres=0, rem=0, just=0, aus=0;
+
+      days2.forEach(d => {
+        const st = att[d.toISOString().slice(0,10)];
+        if (st==='presente') pres++;
+        else if (st==='remoto') rem++;
+        else if (st==='justificado') just++;
+        else if (st==='ausente') aus++;
       });
+
+      const total = pres + just;
+      const pct = Math.round((total/T)*100);
+
+      summary.push([emp, `${MONTHS[mo-1]} ${yr}`, pres, rem, just, aus, total, pct + '%']);
     });
   });
 
-  const csv = rows.map(r => r.join(",")).join("\n");
+  const ws2 = XLSX.utils.aoa_to_sheet(summary);
+  XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
 
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
+  // ── SHEET 3: PROFILES ──
+  const profiles = [['Employee','Key','Days','Schedule','Notes']];
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "attendance.csv";
-  a.click();
+  state.employees.forEach(emp => {
+    const pr = state.profiles[emp] || {};
+    const sc = state.schedule[emp] || {};
 
-  URL.revokeObjectURL(url);
+    profiles.push([
+      emp,
+      pr.keyNumber || '',
+      (sc.days||[]).join(', '),
+      `${sc.timeStart || ''} - ${sc.timeEnd || ''}`,
+      pr.notes || ''
+    ]);
+  });
+
+  const ws3 = XLSX.utils.aoa_to_sheet(profiles);
+  XLSX.utils.book_append_sheet(wb, ws3, 'Profiles');
+
+  XLSX.writeFile(wb, `attendance_${MONTHS[m]}_${y}.xlsx`);
 };
 // ── Init ─────────────────────────────────────────────────────────
 window.startApp = startListener;
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </body>
 </html>
