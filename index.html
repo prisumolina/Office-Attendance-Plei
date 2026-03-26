@@ -634,7 +634,7 @@ function renderPerfiles() {
           <td><span class="pct-pill" style="background:${pctBg};color:${pctCol};">${pct}%</span></td>
         </tr>`;
         justifs.forEach(j => {
-          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Recuperó':''}</td></tr>`;
+          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Compensated':''}</td></tr>`;
         });
       });
       histHTML += '</table></div>';
