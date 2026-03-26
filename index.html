@@ -455,7 +455,7 @@ function renderOverview() {
     if (justifs.length>0) {
       jHTML = '<div class="justif-section"><div class="justif-title">Justificaciones</div>';
       justifs.forEach((j,i) => {
-        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Rec.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${mk}')">×</button></div>`;
+        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Comp.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${mk}')">×</button></div>`;
       });
       jHTML += '</div>';
     }
