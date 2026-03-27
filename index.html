@@ -149,11 +149,11 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
 </div>
 
 <div class="app" id="main-app" style="display:none;">
- <div class="app-title">
-  Office Attendance
-  <button class="btn" onclick="exportExcel()" style="border-color:var(--green);color:var(--green);">   ↓ Export Excel </button>
-  <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
-</div>
+  <div class="app-title">
+    Office Attendance
+    <button class="btn" onclick="exportExcel()" style="border-color:var(--green);color:var(--green);font-size:12px;">↓ Export Excel</button>
+    <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
+  </div>
   <div class="tabs">
     <button class="tab active" onclick="showTab('registro',this)">Daily Log</button>
     <button class="tab" onclick="showTab('overview',this)">Monthly Overview</button>
@@ -219,7 +219,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
 function checkPassword() {
   const input = document.getElementById("password-input").value;
 
- if (input === "2026!Pleiapp") {
+ if (input === "Pleiapp!") {
   document.getElementById("login-screen").style.display = "none";
   document.getElementById("loading-overlay").style.display = "flex";
 
@@ -232,8 +232,7 @@ function checkPassword() {
 }
 </script>
 <!-- Firebase SDK via CDN (no npm needed) -->
-
-  <script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -457,7 +456,7 @@ function renderOverview() {
     if (justifs.length>0) {
       jHTML = '<div class="justif-section"><div class="justif-title">Justificaciones</div>';
       justifs.forEach((j,i) => {
-        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Comp.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${mk}')">×</button></div>`;
+        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Rec.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${mk}')">×</button></div>`;
       });
       jHTML += '</div>';
     }
@@ -636,7 +635,7 @@ function renderPerfiles() {
           <td><span class="pct-pill" style="background:${pctBg};color:${pctCol};">${pct}%</span></td>
         </tr>`;
         justifs.forEach(j => {
-          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Compensated':''}</td></tr>`;
+          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Recuperó':''}</td></tr>`;
         });
       });
       histHTML += '</table></div>';
@@ -650,7 +649,6 @@ function renderPerfiles() {
         <div class="emp-avatar" style="width:44px;height:44px;font-size:15px;background:var(--${col}-bg);color:var(--${col});">${ini}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:15px;color:var(--txt);">${emp}</div>
-          <div style="font-size:11px;color:var(--txt2);margin-top:2px;">${pr.position||'No Job'}</div>
           <div style="font-size:11px;color:var(--txt2);">${horario} · ${diasAcordados}</div>
         </div>
       </div>
@@ -733,103 +731,152 @@ function renderAll() {
   if (document.getElementById('tab-horarios').classList.contains('active')) renderSchedule();
   if (document.getElementById('tab-perfiles').classList.contains('active')) renderPerfiles();
 }
-    window.exportExcel = function() {
+
+// ── Init ─────────────────────────────────────────────────────────
+window.startApp = startListener;
+
+// ── Export to Excel ──────────────────────────────────────────────
+window.exportExcel = function() {
   if (typeof XLSX === 'undefined') {
-    alert('Excel not loaded yet');
+    alert('Excel library not loaded yet, please try again in a moment.');
     return;
   }
 
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const WD     = ['Mon','Tue','Wed','Thu','Fri'];
+
+  // Export the month currently shown in the Daily Log tab
+  const y  = state.currentYear;
+  const m  = state.currentMonth;
+  const mk = monthKey(y, m);
+  const monthLabel = `${MONTHS[m]} ${y}`;
+
   const wb = XLSX.utils.book_new();
 
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  // ── SHEET 1: Daily Log — full day-by-day grid ────────────────
+  const workdays = getWorkdays(y, m);
+  const dayHeaders = workdays.map(d => `${WD[d.getDay()-1]} ${d.getDate()}`);
 
-  // ── SHEET 1: DAILY LOG ──
-  const y = state.currentYear;
-  const m = state.currentMonth;
-  const mk = monthKey(y, m);
-  const days = getWorkdays(y, m);
+  // Build week-group header row (Week 1, Week 2, …)
+  const weekRow = [''];
+  let lastWk = null;
+  workdays.forEach(d => {
+    const wn = getWeekNum(d);
+    weekRow.push(wn !== lastWk ? `Week ${wn}` : '');
+    lastWk = wn;
+  });
+  weekRow.push('', '', '', '', '', '');
 
-  const header = ['Employee', ...days.map(d => `${WEEKDAYS[d.getDay()-1]} ${d.getDate()}`), 'Present','Remote','Justified','Absent','Total','%'];
+  const colHeader = ['Employee', ...dayHeaders, 'Present', 'Remote', 'Justified', 'Absent', 'Total (P+J)', '% vs Target'];
 
-  const rows = state.employees.map(emp => {
-    const T = state.targets[emp] || 12;
-    const att = ((state.attendance[mk]||{})[emp]) || {};
+  const dataRows1 = state.employees.map(emp => {
+    const T   = state.targets[emp] || 12;
+    const att = ((state.attendance[mk] || {})[emp]) || {};
+    let pres = 0, rem = 0, just = 0, aus = 0;
 
-    let pres=0, rem=0, just=0, aus=0;
-
-    const dayData = days.map(d => {
-      const st = att[d.toISOString().slice(0,10)];
-      if (st==='presente') pres++;
-      else if (st==='remoto') rem++;
-      else if (st==='justificado') just++;
-      else if (st==='ausente') aus++;
-      return st || '';
+    const dayCells = workdays.map(d => {
+      const st = att[d.toISOString().slice(0, 10)] || '';
+      if (st === 'presente')         pres++;
+      else if (st === 'remoto')      rem++;
+      else if (st === 'justificado') just++;
+      else if (st === 'ausente')     aus++;
+      const map = { presente: 'Present', remoto: 'Remote', justificado: 'Justified', ausente: 'Absent', '': '' };
+      return map[st] !== undefined ? map[st] : '';
     });
 
     const total = pres + just;
-    const pct = Math.round((total/T)*100);
-
-    return [emp, ...dayData, pres, rem, just, aus, total, pct + '%'];
+    const pct   = T > 0 ? Math.round((total / T) * 100) + '%' : '-';
+    return [emp, ...dayCells, pres, rem, just, aus, total, pct];
   });
 
-  const ws1 = XLSX.utils.aoa_to_sheet([header, ...rows]);
-  XLSX.utils.book_append_sheet(wb, ws1, `${MONTHS[m]} ${y}`);
+  const ws1 = XLSX.utils.aoa_to_sheet([weekRow, colHeader, ...dataRows1]);
+  ws1['!cols'] = [{ wch: 22 }, ...workdays.map(() => ({ wch: 8 })), { wch: 9 }, { wch: 9 }, { wch: 11 }, { wch: 9 }, { wch: 13 }, { wch: 13 }];
+  XLSX.utils.book_append_sheet(wb, ws1, monthLabel);
 
-  // ── SHEET 2: SUMMARY ──
-  const summary = [['Employee','Month','Present','Remote','Justified','Absent','Total','%']];
+  // ── SHEET 2: Monthly Summary — one row per employee ──────────
+  // Includes totals AND a justification block below each employee
+  const summaryRows = [];
 
-  Object.keys(state.attendance).forEach(mk => {
-    const [yr, mo] = mk.split('-').map(Number);
-    const days2 = getWorkdays(yr, mo-1);
+  // Title
+  summaryRows.push([`Monthly Summary — ${monthLabel}`]);
+  summaryRows.push([]);
 
-    state.employees.forEach(emp => {
-      const T = state.targets[emp] || 12;
-      const att = ((state.attendance[mk])||{})[emp] || {};
-
-      let pres=0, rem=0, just=0, aus=0;
-
-      days2.forEach(d => {
-        const st = att[d.toISOString().slice(0,10)];
-        if (st==='presente') pres++;
-        else if (st==='remoto') rem++;
-        else if (st==='justificado') just++;
-        else if (st==='ausente') aus++;
-      });
-
-      const total = pres + just;
-      const pct = Math.round((total/T)*100);
-
-      summary.push([emp, `${MONTHS[mo-1]} ${yr}`, pres, rem, just, aus, total, pct + '%']);
-    });
-  });
-
-  const ws2 = XLSX.utils.aoa_to_sheet(summary);
-  XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
-
-  // ── SHEET 3: PROFILES ──
-  const profiles = [['Employee','Key','Days','Schedule','Notes']];
+  // Stats table header
+  summaryRows.push(['Employee', 'Target', 'Present', 'Remote', 'Justified', 'Absent', 'Total (P+J)', '% Attendance', 'Met Target?', 'Agreed Days', 'Schedule']);
 
   state.employees.forEach(emp => {
-    const pr = state.profiles[emp] || {};
-    const sc = state.schedule[emp] || {};
+    const T       = state.targets[emp] || 12;
+    const att     = ((state.attendance[mk] || {})[emp]) || {};
+    const justifs = ((state.justifications[mk] || {})[emp]) || [];
+    const sc      = state.schedule[emp] || {};
 
-    profiles.push([
-      emp,
-      pr.keyNumber || '',
-      (sc.days||[]).join(', '),
-      `${sc.timeStart || ''} - ${sc.timeEnd || ''}`,
-      pr.notes || ''
-    ]);
+    let pres = 0, rem = 0, just = 0, aus = 0;
+    workdays.forEach(d => {
+      const st = att[d.toISOString().slice(0, 10)] || '';
+      if (st === 'presente')         pres++;
+      else if (st === 'remoto')      rem++;
+      else if (st === 'justificado') just++;
+      else if (st === 'ausente')     aus++;
+    });
+
+    const total     = pres + just;
+    const pct       = T > 0 ? Math.round((total / T) * 100) + '%' : '-';
+    const metTarget = total >= T ? 'YES ✓' : 'NO ✗';
+    const validDays = ['Mon','Tue','Wed','Thu','Fri'];
+    const agreedDays = (sc.days || []).filter(d => validDays.includes(d)).join(', ') || '-';
+    const schedule   = (sc.timeStart && sc.timeEnd) ? `${sc.timeStart} – ${sc.timeEnd}` : '-';
+
+    // Main stats row
+    summaryRows.push([emp, T, pres, rem, just, aus, total, pct, metTarget, agreedDays, schedule]);
+
+    // Absence detail rows
+    const absentDays = workdays.filter(d => {
+      const st = att[d.toISOString().slice(0, 10)] || '';
+      return st === 'ausente' || st === 'justificado';
+    });
+
+    if (absentDays.length > 0) {
+      summaryRows.push(['', 'Date', 'Status', 'Justification', 'Made up?', '', '', '', '', '', '']);
+      absentDays.forEach(d => {
+        const ds  = d.toISOString().slice(0, 10);
+        const st  = att[ds];
+        const label = st === 'justificado' ? 'Justified' : 'Absent';
+        // Find matching justification by date string (loose match)
+        const dayStr = `${WD[d.getDay()-1]} ${d.getDate()}`;
+        const match  = justifs.find(j => j.date && (j.date.includes(String(d.getDate())) || j.date === dayStr));
+        const reason = match ? match.motivo : '-';
+        const madeUp = match ? (match.recupero ? 'Yes' : 'No') : '-';
+        summaryRows.push(['', dayStr, label, reason, madeUp, '', '', '', '', '', '']);
+      });
+    }
+
+    // Justifications that were entered manually (may cover any date)
+    const extraJustifs = justifs.filter(j => {
+      const dayNum = absentDays.find(d => {
+        const dayStr = `${WD[d.getDay()-1]} ${d.getDate()}`;
+        return j.date === dayStr || (j.date && j.date.includes(String(d.getDate())));
+      });
+      return !dayNum; // not already shown above
+    });
+
+    if (extraJustifs.length > 0) {
+      summaryRows.push(['', '— Additional notes —', '', '', '', '', '', '', '', '', '']);
+      extraJustifs.forEach(j => {
+        summaryRows.push(['', j.date || '-', '-', j.motivo, j.recupero ? 'Yes' : 'No', '', '', '', '', '', '']);
+      });
+    }
+
+    summaryRows.push([]); // blank row between employees
   });
 
-  const ws3 = XLSX.utils.aoa_to_sheet(profiles);
-  XLSX.utils.book_append_sheet(wb, ws3, 'Profiles');
+  const ws2 = XLSX.utils.aoa_to_sheet(summaryRows);
+  ws2['!cols'] = [{ wch: 22 }, { wch: 8 }, { wch: 9 }, { wch: 9 }, { wch: 11 }, { wch: 9 }, { wch: 13 }, { wch: 13 }, { wch: 12 }, { wch: 20 }, { wch: 16 }];
+  XLSX.utils.book_append_sheet(wb, ws2, `Summary ${monthLabel}`);
 
+  // ── Download ─────────────────────────────────────────────────
   XLSX.writeFile(wb, `attendance_${MONTHS[m]}_${y}.xlsx`);
 };
-// ── Init ─────────────────────────────────────────────────────────
-window.startApp = startListener;
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </body>
 </html>
