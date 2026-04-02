@@ -8,150 +8,152 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: system-ui, -apple-system, sans-serif; background: #f5f4f0; color: #1a1a18; }
 :root {
-  --bg: #ffffff; --bg2: #f1efe8; --bg3: #f5f4f0;
-  --txt: #1a1a18; --txt2: #5f5e5a; --txt3: #9a9890;
-  --brd: rgba(0,0,0,0.12); --brd2: rgba(0,0,0,0.22);
-  --radius: 8px; --radius-lg: 12px;
-  --green: #639922; --green-bg: #EAF3DE; --green-brd: #C0DD97;
-  --red: #E24B4A; --red-bg: #FCEBEB; --red-brd: #F7C1C1;
-  --amber: #BA7517; --amber-bg: #FAEEDA; --amber-brd: #FAC775;
-  --blue: #185FA5; --blue-bg: #E6F1FB; --blue-brd: #B5D4F4;
-  --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-brd: #9FE1CB;
-  --purple: #534AB7; --purple-bg: #EEEDFE; --purple-brd: #CECBF6;
-  --coral: #993C1D; --coral-bg: #FAECE7; --coral-brd: #F5C4B3;
-  --navy: #1a3a5c; --navy-bg: #e8f0f8; --navy-brd: #a8c4dc;
+  --bg:#ffffff; --bg2:#f1efe8; --bg3:#f5f4f0;
+  --txt:#1a1a18; --txt2:#5f5e5a; --txt3:#9a9890;
+  --brd:rgba(0,0,0,0.12); --brd2:rgba(0,0,0,0.22);
+  --radius:8px; --radius-lg:12px;
+  --green:#639922; --green-bg:#EAF3DE; --green-brd:#C0DD97;
+  --red:#E24B4A; --red-bg:#FCEBEB; --red-brd:#F7C1C1;
+  --amber:#BA7517; --amber-bg:#FAEEDA; --amber-brd:#FAC775;
+  --blue:#185FA5; --blue-bg:#E6F1FB; --blue-brd:#B5D4F4;
+  --teal:#0F6E56; --teal-bg:#E1F5EE; --teal-brd:#9FE1CB;
+  --purple:#534AB7; --purple-bg:#EEEDFE; --purple-brd:#CECBF6;
+  --coral:#993C1D; --coral-bg:#FAECE7; --coral-brd:#F5C4B3;
+  --navy:#1a3a5c; --navy-bg:#e8f0f8; --navy-brd:#a8c4dc;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1e1e1c; --bg2: #2a2a28; --bg3: #161614;
-    --txt: #f0ede6; --txt2: #9a9890; --txt3: #6a6860;
-    --brd: rgba(255,255,255,0.1); --brd2: rgba(255,255,255,0.2);
-  }
-  body { background: var(--bg3); }
+@media (prefers-color-scheme:dark) {
+  :root { --bg:#1e1e1c; --bg2:#2a2a28; --bg3:#161614; --txt:#f0ede6; --txt2:#9a9890; --txt3:#6a6860; --brd:rgba(255,255,255,0.1); --brd2:rgba(255,255,255,0.2); }
+  body { background:var(--bg3); }
 }
-.app { padding: 1.5rem; max-width: 1280px; margin: 0 auto; }
-.app-title { font-size: 20px; font-weight: 600; margin-bottom: 1.25rem; color: var(--txt); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.sync-badge { font-size: 11px; font-weight: 400; padding: 2px 10px; border-radius: 10px; }
-.sync-ok    { background: var(--green-bg); color: var(--green); }
-.sync-wait  { background: var(--amber-bg); color: var(--amber); }
-.sync-err   { background: var(--red-bg);   color: var(--red); }
-.sync-load  { background: var(--bg2);      color: var(--txt2); }
-.tabs { display: flex; gap: 0; border-bottom: 0.5px solid var(--brd); margin-bottom: 1.5rem; overflow-x: auto; }
-.tab { padding: 8px 16px; font-size: 13px; cursor: pointer; border: none; background: none; color: var(--txt2); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; white-space: nowrap; font-family: inherit; }
-.tab.active { color: var(--txt); border-bottom-color: var(--txt); font-weight: 500; }
-.tab:hover:not(.active) { color: var(--txt); }
-.section { display: none; }
-.section.active { display: block; }
-.month-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap; }
-.month-title { font-size: 17px; font-weight: 500; color: var(--txt); }
-.btn { border: 0.5px solid var(--brd2); background: none; padding: 5px 11px; border-radius: var(--radius); cursor: pointer; font-size: 12px; color: var(--txt2); font-family: inherit; }
-.btn:hover { background: var(--bg2); }
-.btn-primary { background: var(--txt); color: var(--bg); border-color: var(--txt); }
-.btn-primary:hover { opacity: 0.85; background: var(--txt); }
-input, select { background: var(--bg); color: var(--txt); border: 0.5px solid var(--brd2); border-radius: var(--radius); font-family: inherit; font-size: 13px; }
-input:focus, select:focus { outline: none; border-color: var(--blue); }
-.grid-container { overflow-x: auto; padding-bottom: 4px; }
-table.att { border-collapse: collapse; min-width: 100%; font-size: 12px; }
-table.att th { padding: 5px 7px; text-align: center; color: var(--txt2); font-weight: 400; border-bottom: 0.5px solid var(--brd); white-space: nowrap; }
-table.att th.emp-col { text-align: left; min-width: 150px; }
-table.att td { padding: 3px 5px; border-bottom: 0.5px solid var(--brd); text-align: center; }
-table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; color: var(--txt); white-space: nowrap; padding-left: 4px; }
-.cell-btn { width: 32px; height: 26px; border-radius: 4px; border: 0.5px solid var(--brd); background: var(--bg2); cursor: pointer; font-size: 10px; color: var(--txt3); display: inline-flex; align-items: center; justify-content: center; transition: all 0.1s; font-family: inherit; }
-.cell-btn.presente    { background: var(--green-bg); border-color: var(--green-brd); color: var(--green); font-weight: 700; }
-.cell-btn.ausente     { background: var(--red-bg);   border-color: var(--red-brd);   color: var(--red);   font-weight: 700; }
-.cell-btn.justificado { background: var(--amber-bg); border-color: var(--amber-brd); color: var(--amber); font-weight: 700; }
-.cell-btn.remoto      { background: var(--blue-bg);  border-color: var(--blue-brd);  color: var(--blue);  font-weight: 700; }
-.week-sep { border-left: 1px solid var(--brd2) !important; }
-.legend { display: flex; gap: 14px; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
-.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--txt2); }
-.legend-dot { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
-.target-row { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--txt2); }
-.target-row input { width: 48px; padding: 4px 7px; text-align: center; }
-.overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 14px; }
-.emp-card { background: var(--bg); border: 0.5px solid var(--brd); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
-.emp-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
-.stat-box { background: var(--bg2); border-radius: var(--radius); padding: 7px 6px; text-align: center; }
-.stat-num { font-size: 18px; font-weight: 600; }
-.stat-label { font-size: 9px; color: var(--txt2); margin-top: 1px; text-transform: uppercase; letter-spacing: 0.3px; }
-.progress-bar { height: 5px; border-radius: 3px; background: var(--brd); overflow: hidden; margin-bottom: 3px; }
-.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
-.pct-label { font-size: 11px; color: var(--txt2); display: flex; justify-content: space-between; }
-.badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
-.badge-green { background: var(--green-bg); color: var(--green); }
-.badge-red   { background: var(--red-bg);   color: var(--red); }
-.badge-amber { background: var(--amber-bg); color: var(--amber); }
-.justif-section { margin-top: 10px; border-top: 0.5px solid var(--brd); padding-top: 9px; }
-.justif-title { font-size: 10px; color: var(--txt2); margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
-.justif-item { font-size: 12px; color: var(--txt); padding: 4px 0; border-bottom: 0.5px solid var(--brd); display: flex; gap: 7px; align-items: center; }
-.justif-item:last-child { border-bottom: none; }
-.add-justif { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
-.add-justif input, .add-justif select { padding: 4px 7px; font-size: 12px; }
-.del-btn { border: none; background: none; color: var(--txt3); cursor: pointer; font-size: 15px; padding: 0 2px; opacity: 0.5; line-height: 1; font-family: inherit; }
-.del-btn:hover { opacity: 1; color: var(--red); }
-.schedule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(265px, 1fr)); gap: 14px; }
-.sched-card { background: var(--bg); border: 0.5px solid var(--brd); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
-.day-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
-.day-chip { padding: 4px 9px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--brd2); color: var(--txt2); background: none; transition: all 0.12s; font-family: inherit; }
-.day-chip.active { background: var(--green-bg); border-color: var(--green-brd); color: var(--green); }
-.field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12px; color: var(--txt2); }
-.field-row input { flex: 1; padding: 4px 8px; font-size: 12px; }
-.field-row label { min-width: 58px; }
-.profile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
-.profile-card { background: var(--bg); border: 0.5px solid var(--brd); border-radius: var(--radius-lg); overflow: hidden; }
-.profile-header { padding: 1rem 1.25rem; border-bottom: 0.5px solid var(--brd); display: flex; align-items: center; gap: 12px; }
-.profile-body { padding: 1rem 1.25rem 0.5rem; }
-.profile-field { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; }
-.profile-field label { min-width: 88px; color: var(--txt2); }
-.profile-field input { flex: 1; padding: 4px 8px; }
-.history-section { padding: 0 1.25rem 1rem; }
-.history-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--txt2); margin-bottom: 8px; border-top: 0.5px solid var(--brd); padding-top: 10px; }
-.history-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-.history-table th { padding: 4px 8px; text-align: left; color: var(--txt2); font-weight: 500; border-bottom: 0.5px solid var(--brd); font-size: 10px; }
-.history-table td { padding: 5px 8px; border-bottom: 0.5px solid var(--brd); color: var(--txt); }
-.history-table tr:last-child td { border-bottom: none; }
-.pct-pill { display: inline-block; padding: 1px 7px; border-radius: 10px; font-weight: 500; font-size: 10px; }
-.loading-overlay { position: fixed; inset: 0; background: var(--bg3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 999; }
-.loading-overlay p { color: var(--txt2); font-size: 14px; }
-.spinner { width: 28px; height: 28px; border: 2px solid var(--brd2); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.app { padding:1.5rem; max-width:1280px; margin:0 auto; }
+.app-title { font-size:20px; font-weight:600; margin-bottom:1.25rem; color:var(--txt); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.sync-badge { font-size:11px; font-weight:400; padding:2px 10px; border-radius:10px; }
+.sync-ok   { background:var(--green-bg); color:var(--green); }
+.sync-wait { background:var(--amber-bg); color:var(--amber); }
+.sync-err  { background:var(--red-bg);   color:var(--red); }
+.sync-load { background:var(--bg2);      color:var(--txt2); }
+.tabs { display:flex; border-bottom:0.5px solid var(--brd); margin-bottom:1.5rem; overflow-x:auto; }
+.tab { padding:8px 16px; font-size:13px; cursor:pointer; border:none; background:none; color:var(--txt2); border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.15s; white-space:nowrap; font-family:inherit; }
+.tab.active { color:var(--txt); border-bottom-color:var(--txt); font-weight:500; }
+.tab:hover:not(.active) { color:var(--txt); }
+.section { display:none; }
+.section.active { display:block; }
+.month-header { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.month-title { font-size:17px; font-weight:500; color:var(--txt); }
+.btn { border:0.5px solid var(--brd2); background:none; padding:5px 11px; border-radius:var(--radius); cursor:pointer; font-size:12px; color:var(--txt2); font-family:inherit; }
+.btn:hover { background:var(--bg2); }
+.btn-primary { background:var(--txt); color:var(--bg); border-color:var(--txt); }
+.btn-primary:hover { opacity:0.85; background:var(--txt); }
+input, select { background:var(--bg); color:var(--txt); border:0.5px solid var(--brd2); border-radius:var(--radius); font-family:inherit; font-size:13px; }
+input:focus, select:focus { outline:none; border-color:var(--blue); }
+.grid-container { overflow-x:auto; padding-bottom:4px; }
+table.att { border-collapse:collapse; min-width:100%; font-size:12px; }
+table.att th { padding:5px 7px; text-align:center; color:var(--txt2); font-weight:400; border-bottom:0.5px solid var(--brd); white-space:nowrap; }
+table.att th.emp-col { text-align:left; min-width:150px; }
+table.att td { padding:3px 5px; border-bottom:0.5px solid var(--brd); text-align:center; }
+table.att td.emp-name { text-align:left; font-weight:500; font-size:12px; color:var(--txt); white-space:nowrap; padding-left:4px; }
+.cell-btn { width:32px; height:26px; border-radius:4px; border:0.5px solid var(--brd); background:var(--bg2); cursor:pointer; font-size:10px; color:var(--txt3); display:inline-flex; align-items:center; justify-content:center; transition:all 0.1s; font-family:inherit; }
+.cell-btn.presente    { background:var(--green-bg); border-color:var(--green-brd); color:var(--green); font-weight:700; }
+.cell-btn.ausente     { background:var(--red-bg);   border-color:var(--red-brd);   color:var(--red);   font-weight:700; }
+.cell-btn.justificado { background:var(--amber-bg); border-color:var(--amber-brd); color:var(--amber); font-weight:700; }
+.cell-btn.remoto      { background:var(--blue-bg);  border-color:var(--blue-brd);  color:var(--blue);  font-weight:700; }
+.week-sep { border-left:1px solid var(--brd2) !important; }
+.legend { display:flex; gap:14px; margin-top:1rem; flex-wrap:wrap; align-items:center; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--txt2); }
+.legend-dot { width:13px; height:13px; border-radius:3px; flex-shrink:0; }
+.overview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(295px,1fr)); gap:14px; }
+.emp-card { background:var(--bg); border:0.5px solid var(--brd); border-radius:var(--radius-lg); padding:1rem 1.25rem; }
+.emp-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; }
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:12px; }
+.stat-box { background:var(--bg2); border-radius:var(--radius); padding:7px 6px; text-align:center; }
+.stat-num { font-size:18px; font-weight:600; }
+.stat-label { font-size:9px; color:var(--txt2); margin-top:1px; text-transform:uppercase; letter-spacing:0.3px; }
+.progress-bar { height:5px; border-radius:3px; background:var(--brd); overflow:hidden; margin-bottom:3px; }
+.progress-fill { height:100%; border-radius:3px; transition:width 0.3s; }
+.pct-label { font-size:11px; color:var(--txt2); display:flex; justify-content:space-between; }
+.badge { font-size:11px; padding:2px 8px; border-radius:10px; font-weight:500; }
+.badge-green { background:var(--green-bg); color:var(--green); }
+.badge-red   { background:var(--red-bg);   color:var(--red); }
+.badge-amber { background:var(--amber-bg); color:var(--amber); }
+.justif-section { margin-top:10px; border-top:0.5px solid var(--brd); padding-top:9px; }
+.justif-title { font-size:10px; color:var(--txt2); margin-bottom:5px; font-weight:600; text-transform:uppercase; letter-spacing:0.4px; }
+.justif-item { font-size:12px; color:var(--txt); padding:4px 0; border-bottom:0.5px solid var(--brd); display:flex; gap:7px; align-items:center; }
+.justif-item:last-child { border-bottom:none; }
+.add-justif { display:flex; gap:5px; margin-top:7px; flex-wrap:wrap; }
+.add-justif input, .add-justif select { padding:4px 7px; font-size:12px; }
+.del-btn { border:none; background:none; color:var(--txt3); cursor:pointer; font-size:15px; padding:0 2px; opacity:0.5; line-height:1; font-family:inherit; }
+.del-btn:hover { opacity:1; color:var(--red); }
+.schedule-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(265px,1fr)); gap:14px; }
+.sched-card { background:var(--bg); border:0.5px solid var(--brd); border-radius:var(--radius-lg); padding:1rem 1.25rem; }
+.day-chips { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:10px; }
+.day-chip { padding:4px 9px; border-radius:20px; font-size:12px; font-weight:500; cursor:pointer; border:0.5px solid var(--brd2); color:var(--txt2); background:none; transition:all 0.12s; font-family:inherit; }
+.day-chip.active { background:var(--green-bg); border-color:var(--green-brd); color:var(--green); }
+.field-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; font-size:12px; color:var(--txt2); }
+.field-row input { flex:1; padding:4px 8px; font-size:12px; }
+.field-row label { min-width:58px; }
+.profile-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:14px; }
+.profile-card { background:var(--bg); border:0.5px solid var(--brd); border-radius:var(--radius-lg); overflow:hidden; }
+.profile-header { padding:1rem 1.25rem; border-bottom:0.5px solid var(--brd); display:flex; align-items:center; gap:12px; }
+.profile-body { padding:1rem 1.25rem 0.5rem; }
+.profile-field { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:12px; }
+.profile-field label { min-width:88px; color:var(--txt2); }
+.profile-field input { flex:1; padding:4px 8px; }
+.history-section { padding:0 1.25rem 1rem; }
+.history-title { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.4px; color:var(--txt2); margin-bottom:8px; border-top:0.5px solid var(--brd); padding-top:10px; }
+.history-table { width:100%; border-collapse:collapse; font-size:11px; }
+.history-table th { padding:4px 8px; text-align:left; color:var(--txt2); font-weight:500; border-bottom:0.5px solid var(--brd); font-size:10px; }
+.history-table td { padding:5px 8px; border-bottom:0.5px solid var(--brd); color:var(--txt); }
+.history-table tr:last-child td { border-bottom:none; }
+.pct-pill { display:inline-block; padding:1px 7px; border-radius:10px; font-weight:500; font-size:10px; }
+.loading-overlay { position:fixed; inset:0; background:var(--bg3); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:999; }
+.loading-overlay p { color:var(--txt2); font-size:14px; }
+.spinner { width:28px; height:28px; border:2px solid var(--brd2); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+/* Import modal */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:2000; align-items:center; justify-content:center; }
+.modal-box { background:var(--bg); border-radius:var(--radius-lg); padding:1.5rem; width:min(500px,95vw); max-height:90vh; overflow-y:auto; border:0.5px solid var(--brd2); }
+.modal-title { font-size:15px; font-weight:600; color:var(--txt); margin-bottom:4px; }
+.modal-sub { font-size:12px; color:var(--txt2); margin-bottom:1.2rem; line-height:1.5; }
+.dropzone { border:1.5px dashed var(--brd2); border-radius:var(--radius); padding:2rem 1rem; text-align:center; cursor:pointer; color:var(--txt2); font-size:13px; transition:border-color 0.15s; }
+.dropzone:hover { border-color:var(--blue); }
+.col-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1rem; }
+.col-label { font-size:12px; color:var(--txt2); display:block; margin-bottom:4px; }
+.preview-wrap { overflow-x:auto; margin-bottom:1rem; border:0.5px solid var(--brd); border-radius:var(--radius); font-size:11px; }
+.preview-wrap table { border-collapse:collapse; min-width:100%; }
+.preview-wrap th { padding:4px 8px; background:var(--bg2); color:var(--txt2); font-weight:500; border-bottom:0.5px solid var(--brd); text-align:left; }
+.preview-wrap td { padding:4px 8px; border-bottom:0.5px solid var(--brd); color:var(--txt); }
+.result-box { padding:8px 12px; border-radius:var(--radius); font-size:13px; margin-bottom:8px; }
+.result-green  { background:var(--green-bg); color:var(--green); }
+.result-amber  { background:var(--amber-bg); color:var(--amber); }
+.result-muted  { background:var(--bg2);      color:var(--txt2); }
+.modal-footer { display:flex; justify-content:flex-end; gap:8px; margin-top:1rem; }
+.err-msg { color:var(--red); font-size:12px; margin-bottom:8px; display:none; }
 </style>
 </head>
 <body>
-<div id="login-screen" style="
-  position: fixed;
-  inset: 0;
-  background: #f5f4f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-">
+
+<!-- Login -->
+<div id="login-screen" style="position:fixed;inset:0;background:#f5f4f0;display:flex;align-items:center;justify-content:center;z-index:1000;">
   <div style="background:white;padding:30px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:center;min-width:280px;">
     <h2 style="margin-bottom:15px;">Access</h2>
-    <input 
-      type="password" 
-      id="password-input" 
-      placeholder="Enter password"
-      style="padding:10px;width:100%;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;"
-      onkeydown="if(event.key==='Enter')checkPassword()"
-    >
-    <button onclick="checkPassword()" style="padding:10px 15px;border:none;background:black;color:white;border-radius:8px;cursor:pointer;width:100%;">
-      Access
-    </button>
+    <input type="password" id="password-input" placeholder="Enter password" style="padding:10px;width:100%;margin-bottom:10px;border-radius:8px;border:1px solid #ccc;" onkeydown="if(event.key==='Enter')checkPassword()">
+    <button onclick="checkPassword()" style="padding:10px 15px;border:none;background:black;color:white;border-radius:8px;cursor:pointer;width:100%;">Access</button>
     <p id="error-msg" style="color:red;font-size:12px;margin-top:8px;display:none;">Incorrect password</p>
   </div>
 </div>
-<!-- Loading screen -->
+
+<!-- Loading -->
 <div class="loading-overlay" id="loading-overlay" style="display:none;">
   <div class="spinner"></div>
   <p>Connecting to database...</p>
 </div>
 
+<!-- App -->
 <div class="app" id="main-app" style="display:none;">
   <div class="app-title">
     Office Attendance
-    <button class="btn" onclick="exportExcel()" style="border-color:var(--green);color:var(--green);font-size:12px;">↓ Export Excel</button>
+    <button class="btn" onclick="openImport()" style="border-color:var(--blue);color:var(--blue);">↑ Import CSV</button>
+    <button class="btn" onclick="exportExcel()" style="border-color:var(--green);color:var(--green);">↓ Export Excel</button>
     <span class="sync-badge sync-load" id="sync-badge">Loading...</span>
   </div>
   <div class="tabs">
@@ -161,6 +163,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
     <button class="tab" onclick="showTab('perfiles',this)">Profiles</button>
   </div>
 
+  <!-- Daily Log -->
   <div id="tab-registro" class="section active">
     <div class="month-header">
       <div style="display:flex;gap:4px;align-items:center;">
@@ -187,6 +190,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
     </div>
   </div>
 
+  <!-- Monthly Overview -->
   <div id="tab-overview" class="section">
     <div class="month-header">
       <div style="display:flex;gap:4px;align-items:center;">
@@ -199,6 +203,7 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
     <div class="overview-grid" id="overview-cards"></div>
   </div>
 
+  <!-- Scheduled Days -->
   <div id="tab-horarios" class="section">
     <div style="margin-bottom:1rem;">
       <div style="font-size:15px;font-weight:500;color:var(--txt);">Fixed attendance settings</div>
@@ -207,123 +212,164 @@ table.att td.emp-name { text-align: left; font-weight: 500; font-size: 12px; col
     <div class="schedule-grid" id="schedule-cards"></div>
   </div>
 
+  <!-- Profiles -->
   <div id="tab-perfiles" class="section">
     <div style="margin-bottom:1rem;">
       <div style="font-size:15px;font-weight:500;color:var(--txt);">Employee profiles</div>
-      <p style="font-size:12px;color:var(--txt2);margin-top:4px;">Personal info, key number, schedule and monthly history.</p>
+      <p style="font-size:12px;color:var(--txt2);margin-top:4px;">Key number, schedule and monthly history.</p>
     </div>
     <div class="profile-grid" id="profile-cards"></div>
   </div>
 </div>
+
+<!-- ── CSV Import Modal ───────────────────────────────────────── -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal-box">
+
+    <!-- Step 1: upload -->
+    <div id="imp-s1">
+      <div class="modal-title">Import CSV — Auto-mark attendance</div>
+      <p class="modal-sub">Upload the cleaned CSV with <strong>employee_name</strong> and <strong>date</strong> columns. Each row = one office visit. The app will mark those days as Present automatically.</p>
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('csv-input').click()">
+        Click to choose a CSV file<br>
+        <span style="font-size:11px;color:var(--txt3);">or drag &amp; drop here — accepts .csv</span>
+      </div>
+      <input type="file" id="csv-input" accept=".csv,.txt" style="display:none;" onchange="csvStep1(this.files[0])">
+      <p class="err-msg" id="imp-err1"></p>
+      <div class="modal-footer"><button class="btn" onclick="closeImport()">Cancel</button></div>
+    </div>
+
+    <!-- Step 2: map columns -->
+    <div id="imp-s2" style="display:none;">
+      <div class="modal-title">Map columns</div>
+      <p class="modal-sub">Select which column contains the <strong>employee name</strong> and which contains the <strong>date</strong>. Detected <span id="imp-rowcount"></span> rows.</p>
+      <div class="col-grid">
+        <div>
+          <label class="col-label">Employee name column</label>
+          <select id="col-name" style="width:100%;padding:6px 8px;" onchange="renderPreview()"></select>
+        </div>
+        <div>
+          <label class="col-label">Date column</label>
+          <select id="col-date" style="width:100%;padding:6px 8px;" onchange="renderPreview()"></select>
+        </div>
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label class="col-label">Date format</label>
+        <select id="date-fmt" style="width:100%;padding:6px 8px;" onchange="renderPreview()">
+          <option value="auto">Auto-detect</option>
+          <option value="yyyy-mm-dd">YYYY-MM-DD (e.g. 2026-03-27)</option>
+          <option value="dd/mm/yyyy">DD/MM/YYYY (e.g. 27/03/2026)</option>
+          <option value="mm/dd/yyyy">MM/DD/YYYY (e.g. 03/27/2026)</option>
+          <option value="dd-mm-yyyy">DD-MM-YYYY (e.g. 27-03-2026)</option>
+        </select>
+      </div>
+      <div class="preview-wrap" id="imp-preview"></div>
+      <p class="err-msg" id="imp-err2"></p>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeImport()">Cancel</button>
+        <button class="btn btn-primary" onclick="runImport()">Import &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 3: results -->
+    <div id="imp-s3" style="display:none;">
+      <div class="modal-title" style="margin-bottom:1rem;">Import complete ✓</div>
+      <div id="imp-results"></div>
+      <div class="modal-footer"><button class="btn btn-primary" onclick="closeImport()">Done</button></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Password check (non-module, runs before Firebase) -->
 <script>
 function checkPassword() {
-  const input = document.getElementById("password-input").value;
-
- if (input === "Pleiapp!") {
-  document.getElementById("login-screen").style.display = "none";
-  document.getElementById("loading-overlay").style.display = "flex";
-
-  if (window.startApp) {
-    window.startApp();
-  }
-} else {
-    document.getElementById("error-msg").style.display = "block";
+  const val = document.getElementById('password-input').value;
+  if (val === '2026!Pleiapp') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('loading-overlay').style.display = 'flex';
+    if (window.startApp) window.startApp();
+  } else {
+    document.getElementById('error-msg').style.display = 'block';
   }
 }
 </script>
-<!-- Firebase SDK via CDN (no npm needed) -->
+
+<!-- Firebase SDK -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-// ── Firebase config ──────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyB5QaQGSkrl-GhmiALB4VPcaop-7JSjnNw",
-  authDomain: "presencialidad-oficina.firebaseapp.com",
-  projectId: "presencialidad-oficina",
-  storageBucket: "presencialidad-oficina.firebasestorage.app",
-  messagingSenderId: "125044845231",
-  appId: "1:125044845231:web:72e367e4edfbab1e78425a"
+  apiKey: 'AIzaSyB5QaQGSkrl-GhmiALB4VPcaop-7JSjnNw',
+  authDomain: 'presencialidad-oficina.firebaseapp.com',
+  projectId: 'presencialidad-oficina',
+  storageBucket: 'presencialidad-oficina.firebasestorage.app',
+  messagingSenderId: '125044845231',
+  appId: '1:125044845231:web:72e367e4edfbab1e78425a'
 };
-// ─────────────────────────────────────────────────────────────────
 
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
-const DB_DOC = doc(db, "presencialidad", "main");
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const DDOC = doc(db, 'presencialidad', 'main');
 
-const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const WEEKDAYS  = ['Mon','Tue','Wed','Thu','Fri'];
-const STATES = ['none','presente','remoto','justificado','ausente'];
-const COLORS    = ['blue','teal','purple','coral','amber','navy'];
+const MONTHS  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WD      = ['Mon','Tue','Wed','Thu','Fri'];
+const STATES  = ['none','presente','remoto','justificado','ausente'];
+const COLORS  = ['blue','teal','purple','coral','amber','navy'];
 
-const makeDefault = () => ({
-  currentMonth:  new Date().getMonth(),
-  currentYear:   new Date().getFullYear(),
-  overviewMonth: new Date().getMonth(),
-  overviewYear:  new Date().getFullYear(),
-  target: 12,
-  targets: {},
-  employees: [],
-  attendance: {},
-  justifications: {},
-  schedule: {},
-  profiles: {}
+const mkDef = () => ({
+  currentMonth: new Date().getMonth(), currentYear: new Date().getFullYear(),
+  overviewMonth: new Date().getMonth(), overviewYear: new Date().getFullYear(),
+  target: 12, targets: {}, employees: [],
+  attendance: {}, justifications: {}, schedule: {}, profiles: {}
 });
 
-let state = makeDefault();
-let saveTimer = null;
-let saving = false;
+let state = mkDef();
+let saveTimer = null, saving = false;
 
-// ── Sync badge helpers ───────────────────────────────────────────
 function badge(cls, txt) {
   const el = document.getElementById('sync-badge');
-  el.className = 'sync-badge ' + cls;
-  el.textContent = txt;
+  el.className = 'sync-badge ' + cls; el.textContent = txt;
 }
 
-// ── Save to Firestore ────────────────────────────────────────────
 function saveState() {
   clearTimeout(saveTimer);
   badge('sync-wait', 'Saving...');
   saveTimer = setTimeout(async () => {
     try {
       saving = true;
-      await setDoc(DB_DOC, state);
+      await setDoc(DDOC, state);
       badge('sync-ok', '✓ Synced');
-      setTimeout(() => badge('sync-ok', '● En línea'), 2000);
-    } catch(e) {
-      badge('sync-err', '⚠ Error saving');
-      console.error(e);
-    } finally { saving = false; }
+      setTimeout(() => badge('sync-ok', '● Online'), 2000);
+    } catch(e) { badge('sync-err', '⚠ Error saving'); console.error(e); }
+    finally { saving = false; }
   }, 600);
 }
 
-// ── Real-time listener: updates UI when anyone changes data ──────
 function startListener() {
-  onSnapshot(DB_DOC, (snap) => {
-    if (saving) return; // skip our own writes mid-flight
+  onSnapshot(DDOC, snap => {
+    if (saving) return;
     if (snap.exists()) {
-      const remote = snap.data();
-      state = Object.assign(makeDefault(), remote);
-      const targetInput = document.getElementById('target-input'); if (targetInput) targetInput.value = state.target || 12;
+      state = Object.assign(mkDef(), snap.data());
+      const ti = document.getElementById('target-input');
+      if (ti) ti.value = state.target || 12;
       renderAll();
     }
-    badge('sync-ok', '● En línea');
+    badge('sync-ok', '● Online');
     document.getElementById('loading-overlay').style.display = 'none';
     document.getElementById('main-app').style.display = 'block';
-  }, (err) => {
+  }, err => {
     badge('sync-err', '⚠ Offline');
-    console.error(err);
-    document.getElementById('loading-overlay').innerHTML = `
-      <p style="color:var(--red);font-size:14px;">Could not connect to the database.</p>
-      <p style="color:var(--txt2);font-size:12px;margin-top:6px;">Check your internet connection and refresh the page.</p>`;
+    document.getElementById('loading-overlay').innerHTML =
+      '<p style="color:var(--red);font-size:14px;">Could not connect. Check internet and refresh.</p>';
   });
 }
 
-// ── Helpers ──────────────────────────────────────────────────────
-function monthKey(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
+// ── helpers ──────────────────────────────────────────────────────
+function mk(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
 
-function getWorkdays(year, month) {
+function workdays(year, month) {
   const days = [], d = new Date(year, month, 1);
   while (d.getMonth() === month) {
     if (d.getDay() !== 0 && d.getDay() !== 6) days.push(new Date(d));
@@ -332,74 +378,69 @@ function getWorkdays(year, month) {
   return days;
 }
 
-function getWeekNum(date) {
-  let week = 0;
-  const cur = new Date(date.getFullYear(), date.getMonth(), 1);
-  while (cur <= date) {
-    if (cur.getDay() === 1 || cur.getDate() === 1) week++;
-    cur.setDate(cur.getDate()+1);
-  }
-  return week;
+function weekNum(date) {
+  let w = 0; const c = new Date(date.getFullYear(), date.getMonth(), 1);
+  while (c <= date) { if (c.getDay()===1 || c.getDate()===1) w++; c.setDate(c.getDate()+1); }
+  return w;
 }
 
 function initEmp(emp) {
-  const mk = monthKey(state.currentYear, state.currentMonth);
-  if (!state.attendance[mk])             state.attendance[mk] = {};
-  if (!state.targets[emp]) state.targets[emp] = 12;
-  if (!state.attendance[mk][emp])        state.attendance[mk][emp] = {};
-  if (!state.justifications[mk])         state.justifications[mk] = {};
-  if (!state.justifications[mk][emp])    state.justifications[mk][emp] = [];
-  if (!state.schedule[emp])             state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
-  if (!state.profiles[emp])             state.profiles[emp] = { keyNumber:'', email:'', phone:'', position:'', notes:'' };
+  const key = mk(state.currentYear, state.currentMonth);
+  if (!state.attendance[key])          state.attendance[key] = {};
+  if (!state.attendance[key][emp])     state.attendance[key][emp] = {};
+  if (!state.justifications[key])      state.justifications[key] = {};
+  if (!state.justifications[key][emp]) state.justifications[key][emp] = [];
+  if (!state.targets[emp])             state.targets[emp] = 12;
+  if (!state.schedule[emp])            state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
+  if (!state.profiles[emp])            state.profiles[emp] = { keyNumber:'', notes:'' };
 }
 
-function getInitials(name) {
-  const parts = name.split(/[,\s]+/).filter(Boolean);
-  return parts.length >= 2 ? (parts[0][0]+(parts[1][0]||'')).toUpperCase() : name.slice(0,2).toUpperCase();
+function ini(name) {
+  const p = name.split(/[,\s]+/).filter(Boolean);
+  return p.length >= 2 ? (p[0][0]+p[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
 }
-function safeId(s)  { return s.replace(/[^a-zA-Z0-9]/g,'_'); }
-function esc(s)     { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function sid(s) { return s.replace(/[^a-zA-Z0-9]/g,'_'); }
+function esc(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 
-// ── Registro diario ──────────────────────────────────────────────
-window.cycleCell = function(emp, ds) {
-  const mk = monthKey(state.currentYear, state.currentMonth);
+// ── Daily Log ─────────────────────────────────────────────────────
+window.cycleCell = (emp, ds) => {
+  const key = mk(state.currentYear, state.currentMonth);
   initEmp(emp);
-  const cur = state.attendance[mk][emp][ds] || 'none';
-  state.attendance[mk][emp][ds] = STATES[(STATES.indexOf(cur)+1) % STATES.length];
+  const cur = state.attendance[key][emp][ds] || 'none';
+  state.attendance[key][emp][ds] = STATES[(STATES.indexOf(cur)+1) % STATES.length];
   saveState(); renderRegistro();
 };
 
 function renderRegistro() {
-  const mk   = monthKey(state.currentYear, state.currentMonth);
-  const days = getWorkdays(state.currentYear, state.currentMonth);
-  document.getElementById('month-label-registro').textContent = `${MONTHS_EN[state.currentMonth]} ${state.currentYear}`;
+  const key  = mk(state.currentYear, state.currentMonth);
+  const days = workdays(state.currentYear, state.currentMonth);
+  document.getElementById('month-label-registro').textContent = `${MONTHS[state.currentMonth]} ${state.currentYear}`;
 
   let weeks = [], cw = null;
   days.forEach(d => {
-    const wn = getWeekNum(d);
+    const wn = weekNum(d);
     if (!cw || cw.wn !== wn) { cw = {wn, days:[]}; weeks.push(cw); }
     cw.days.push(d);
   });
 
-  let wRow = '<tr><th class="emp-col">Empleado</th>';
-  weeks.forEach(w => { wRow += `<th colspan="${w.days.length}" class="week-sep" style="font-size:10px;color:var(--txt3);">Sem ${w.wn}</th>`; });
-  wRow += '<th style="border-left:1px solid var(--brd2);font-size:10px;" title="Presente">P</th><th style="font-size:10px;" title="Remoto">R</th><th style="font-size:10px;" title="Total presencial">Tot</th></tr>';
+  let wRow = '<tr><th class="emp-col">Employee</th>';
+  weeks.forEach(w => { wRow += `<th colspan="${w.days.length}" class="week-sep" style="font-size:10px;color:var(--txt3);">Wk ${w.wn}</th>`; });
+  wRow += '<th style="border-left:1px solid var(--brd2);font-size:10px;" title="Present">P</th><th style="font-size:10px;" title="Remote">R</th><th style="font-size:10px;" title="Total">Tot</th></tr>';
 
   let dRow = '<tr><th class="emp-col"></th>';
   weeks.forEach(w => {
     w.days.forEach((d,i) => {
-      dRow += `<th${i===0?' class="week-sep"':''}>${WEEKDAYS[d.getDay()-1]}<br><span style="font-size:9px;">${d.getDate()}</span></th>`;
+      dRow += `<th${i===0?' class="week-sep"':''}>${WD[d.getDay()-1]}<br><span style="font-size:9px;">${d.getDate()}</span></th>`;
     });
   });
   dRow += '<th style="border-left:1px solid var(--brd2);"></th><th></th><th></th></tr>';
   document.getElementById('table-head').innerHTML = wRow + dRow;
 
   let bHTML = '';
-state.employees.forEach(emp => {
-  const T = state.targets[emp] || 12;
-  initEmp(emp);
+  state.employees.forEach(emp => {
     initEmp(emp);
-    const att = state.attendance[monthKey(state.currentYear, state.currentMonth)][emp] || {};
+    const T   = state.targets[emp] || 12;
+    const att = state.attendance[key][emp] || {};
     let pres = 0, rem = 0;
     let row = `<tr><td class="emp-name">${emp} <button class="del-btn" onclick="removeEmployee('${esc(emp)}')">×</button></td>`;
     weeks.forEach(w => {
@@ -421,49 +462,49 @@ state.employees.forEach(emp => {
   document.getElementById('table-body').innerHTML = bHTML;
 }
 
-// ── Overview mensual ─────────────────────────────────────────────
+// ── Overview ──────────────────────────────────────────────────────
 function renderOverview() {
   const y = state.overviewYear, m = state.overviewMonth;
-  const mk   = monthKey(y, m);
-  const days = getWorkdays(y, m);
+  const key  = mk(y, m);
+  const days = workdays(y, m);
   const T    = state.target || 12;
-  document.getElementById('month-label-overview').textContent = `${MONTHS_EN[m]} ${y}`;
+  document.getElementById('month-label-overview').textContent = `${MONTHS[m]} ${y}`;
+  document.getElementById('overview-meta-label').textContent  = `Target: ${T} days in office`;
 
   let html = '';
-  state.employees.forEach((emp, idx) => {
-  const T = state.targets[emp] || 12;
-    const att     = ((state.attendance[mk]||{})[emp]) || {};
-    const justifs = ((state.justifications[mk]||{})[emp]) || [];
+  state.employees.forEach((emp,idx) => {
+    const empT    = state.targets[emp] || 12;
+    const att     = ((state.attendance[key]||{})[emp]) || {};
+    const justifs = ((state.justifications[key]||{})[emp]) || [];
     let pres=0,rem=0,ausen=0,just=0,ausDays=[];
     days.forEach(d => {
-      const ds = d.toISOString().slice(0,10), st = att[ds];
+      const st = att[d.toISOString().slice(0,10)];
       if (st==='presente')    pres++;
       else if (st==='remoto') rem++;
       else if (st==='ausente')     { ausen++; ausDays.push(d); }
       else if (st==='justificado') { just++;  ausDays.push(d); }
     });
     const total    = pres+just;
-    const pct      = Math.round((total/T)*100);
+    const pct      = Math.round((total/empT)*100);
     const col      = COLORS[idx % COLORS.length];
-    const ini      = getInitials(emp);
-    const barCol   = total>=T?'var(--green)':total>=Math.round(T*0.7)?'var(--amber)':'var(--red)';
-    const badgeCls = total>=T?'badge-green':total>=Math.round(T*0.7)?'badge-amber':'badge-red';
-    const badgeTxt = total>=T?'Target met':'Below target';
-    const eid      = safeId(emp);
-    const ausTxt   = ausDays.map(d=>`${WEEKDAYS[d.getDay()-1]} ${d.getDate()}`).join(', ');
+    const barCol   = total>=empT?'var(--green)':total>=Math.round(empT*0.7)?'var(--amber)':'var(--red)';
+    const badgeCls = total>=empT?'badge-green':total>=Math.round(empT*0.7)?'badge-amber':'badge-red';
+    const badgeTxt = total>=empT?'Target met':'Below target';
+    const eid      = sid(emp);
+    const ausTxt   = ausDays.map(d=>`${WD[d.getDay()-1]} ${d.getDate()}`).join(', ');
 
     let jHTML = '';
     if (justifs.length>0) {
-      jHTML = '<div class="justif-section"><div class="justif-title">Justificaciones</div>';
+      jHTML = '<div class="justif-section"><div class="justif-title">Justifications</div>';
       justifs.forEach((j,i) => {
-        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Rec.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${mk}')">×</button></div>`;
+        jHTML += `<div class="justif-item"><span style="color:var(--txt2);min-width:72px;font-size:11px;">${j.date}</span><span style="flex:1">${j.motivo}</span>${j.recupero?'<span style="color:var(--green);font-size:10px;white-space:nowrap;">✓ Comp.</span>':''}<button class="del-btn" onclick="removeJustifOv('${esc(emp)}',${i},'${key}')">×</button></div>`;
       });
       jHTML += '</div>';
     }
 
     html += `<div class="emp-card">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-        <div class="emp-avatar" style="background:var(--${col}-bg);color:var(--${col});">${ini}</div>
+        <div class="emp-avatar" style="background:var(--${col}-bg);color:var(--${col});">${ini(emp)}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:14px;color:var(--txt);">${emp}</div>
           <div style="margin-top:3px;"><span class="badge ${badgeCls}">${badgeTxt}</span></div>
@@ -476,8 +517,8 @@ function renderOverview() {
         <div class="stat-box"><div class="stat-num" style="color:var(--red);">${ausen}</div><div class="stat-label">Absent</div></div>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:${barCol};"></div></div>
-      <div class="pct-label"><span>Office attendance: <strong>${pct}%</strong></span><span>${total}/${T} days</span></div>
-      ${ausDays.length>0?`<div style="margin-top:7px;font-size:11px;color:var(--txt2);">absences: ${ausTxt}</div>`:''}
+      <div class="pct-label"><span>Office attendance: <strong>${pct}%</strong></span><span>${total}/${empT} days</span></div>
+      ${ausDays.length>0?`<div style="margin-top:7px;font-size:11px;color:var(--txt2);">Absences: ${ausTxt}</div>`:''}
       ${jHTML}
       <div class="justif-section">
         <div class="justif-title">Add justification</div>
@@ -485,123 +526,88 @@ function renderOverview() {
           <input type="text" id="jdate-${eid}" placeholder="Date" style="width:88px;">
           <input type="text" id="jmot-${eid}" placeholder="Reason..." style="flex:1;min-width:90px;">
           <select id="jrec-${eid}" style="font-size:11px;padding:3px 5px;"><option value="no">Not made up</option><option value="si">Made up</option></select>
-          <button class="btn" style="font-size:12px;padding:3px 8px;" onclick="addJustif('${esc(emp)}','${mk}')">+</button>
+          <button class="btn" style="font-size:12px;padding:3px 8px;" onclick="addJustif('${esc(emp)}','${key}')">+</button>
         </div>
       </div>
     </div>`;
   });
-  document.getElementById('overview-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No hay empleados cargados.</p>';
+  document.getElementById('overview-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No employees loaded.</p>';
 }
 
-window.addJustif = function(emp, mk) {
-  const id = safeId(emp);
-  const date   = document.getElementById(`jdate-${id}`)?.value.trim();
-  const motivo = document.getElementById(`jmot-${id}`)?.value.trim();
+window.addJustif = (emp, key) => {
+  const id = sid(emp);
+  const date    = document.getElementById(`jdate-${id}`)?.value.trim();
+  const motivo  = document.getElementById(`jmot-${id}`)?.value.trim();
   const recupero = document.getElementById(`jrec-${id}`)?.value === 'si';
   if (!date || !motivo) return;
-  if (!state.justifications[mk])      state.justifications[mk] = {};
-  if (!state.justifications[mk][emp]) state.justifications[mk][emp] = [];
-  state.justifications[mk][emp].push({date, motivo, recupero});
+  if (!state.justifications[key])      state.justifications[key] = {};
+  if (!state.justifications[key][emp]) state.justifications[key][emp] = [];
+  state.justifications[key][emp].push({date, motivo, recupero});
   saveState(); renderOverview();
 };
 
-window.removeJustifOv = function(emp, idx, mk) {
-  state.justifications[mk]?.[emp]?.splice(idx,1);
+window.removeJustifOv = (emp, idx, key) => {
+  state.justifications[key]?.[emp]?.splice(idx,1);
   saveState(); renderOverview();
 };
 
-// ── Días acordados ───────────────────────────────────────────────
+// ── Scheduled Days ────────────────────────────────────────────────
 function renderSchedule() {
-  const days = ['Mon','Tue','Wed','Thu','Fri'];
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
   let html = '';
-
   state.employees.forEach((emp,idx) => {
-  const T = state.targets[emp] || 12;
     if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
-
     const sc  = state.schedule[emp];
     const col = COLORS[idx % COLORS.length];
-    const ini = getInitials(emp);
-
-    const chips = days.map(d =>
+    const chips = DAYS.map(d =>
       `<button class="day-chip ${sc.days.includes(d)?'active':''}" onclick="toggleDay('${esc(emp)}','${d}')">${d}</button>`
     ).join('');
-
+    const dCnt = DAYS.filter(d => sc.days.includes(d)).length;
     html += `<div class="sched-card">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-        <div class="emp-avatar" style="background:var(--${col}-bg);color:var(--${col});">${ini}</div>
+        <div class="emp-avatar" style="background:var(--${col}-bg);color:var(--${col});">${ini(emp)}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:14px;color:var(--txt);">${emp}</div>
-
-          <div style="font-size:11px;color:var(--txt2);">
-            ${['Mon','Tue','Wed','Thu','Fri'].filter(d => sc.days.includes(d)).length}
-            ${['Mon','Tue','Wed','Thu','Fri'].filter(d => sc.days.includes(d)).length === 1 ? 'day' : 'days'}/week
-          </div>
-
-          <div style="margin-top:6px;font-size:11px;color:var(--txt2);">
-            Target:
-            <input type="number" 
-              value="${state.targets[emp] || 12}" 
-              style="width:50px;padding:2px 4px;margin-left:4px;"
-              onchange="updateEmpTarget('${esc(emp)}', this.value)">
-          </div>
-
+          <div style="font-size:11px;color:var(--txt2);">${dCnt} ${dCnt===1?'day':'days'}/week</div>
+          <div style="margin-top:6px;font-size:11px;color:var(--txt2);">Target: <input type="number" value="${state.targets[emp]||12}" style="width:50px;padding:2px 4px;margin-left:4px;" onchange="updateEmpTarget('${esc(emp)}',this.value)"></div>
         </div>
         <button class="del-btn" onclick="removeEmployee('${esc(emp)}')">×</button>
       </div>
-
       <div class="day-chips">${chips}</div>
-
-      <div class="field-row">
-        <label>Start Time:</label>
-        <input type="time" value="${sc.timeStart||''}" onchange="updateSchedule('${esc(emp)}','timeStart',this.value)">
-      </div>
-
-      <div class="field-row">
-        <label>End time:</label>
-        <input type="time" value="${sc.timeEnd||''}" onchange="updateSchedule('${esc(emp)}','timeEnd',this.value)">
-      </div>
-
-      <div class="field-row">
-        <label>Notes:</label>
-        <input type="text" value="${sc.notes||''}" onchange="updateSchedule('${esc(emp)}','notes',this.value)">
-      </div>
+      <div class="field-row"><label>Start time:</label><input type="time" value="${sc.timeStart||''}" onchange="updateSchedule('${esc(emp)}','timeStart',this.value)"></div>
+      <div class="field-row"><label>End time:</label><input type="time" value="${sc.timeEnd||''}" onchange="updateSchedule('${esc(emp)}','timeEnd',this.value)"></div>
+      <div class="field-row"><label>Notes:</label><input type="text" value="${sc.notes||''}" placeholder="Agreements, flex..." onchange="updateSchedule('${esc(emp)}','notes',this.value)"></div>
     </div>`;
   });
-
-  document.getElementById('schedule-cards').innerHTML = html || '<p>No employees.</p>';
+  document.getElementById('schedule-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No employees.</p>';
 }
 
-window.toggleDay = function(emp, day) {
+window.toggleDay = (emp, day) => {
   if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
   const idx = state.schedule[emp].days.indexOf(day);
   if (idx===-1) state.schedule[emp].days.push(day);
   else          state.schedule[emp].days.splice(idx,1);
   saveState(); renderSchedule();
 };
-
-window.updateSchedule = function(emp, field, val) {
+window.updateSchedule = (emp, field, val) => {
   if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
-  state.schedule[emp][field] = val;
-  saveState();
+  state.schedule[emp][field] = val; saveState();
 };
-  window.updateEmpTarget = function(emp, val) {
-  state.targets[emp] = parseInt(val) || 0;
-  saveState();
-  renderAll();
+window.updateEmpTarget = (emp, val) => {
+  state.targets[emp] = parseInt(val)||0; saveState(); renderAll();
 };
 
-// ── Perfiles ─────────────────────────────────────────────────────
+// ── Profiles ──────────────────────────────────────────────────────
 function renderPerfiles() {
+  const T_global = state.target || 12;
   let html = '';
   state.employees.forEach((emp,idx) => {
-  const T = state.targets[emp] || 12;
-    if (!state.profiles[emp]) state.profiles[emp] = { keyNumber:'', email:'', phone:'', position:'', notes:'' };
+    if (!state.profiles[emp]) state.profiles[emp] = { keyNumber:'', notes:'' };
     if (!state.schedule[emp]) state.schedule[emp] = { days:[], timeStart:'', timeEnd:'', notes:'' };
     const pr  = state.profiles[emp];
     const sc  = state.schedule[emp];
     const col = COLORS[idx % COLORS.length];
-    const ini = getInitials(emp);
+    const empT = state.targets[emp] || 12;
 
     const allMks = Object.keys(state.attendance).sort();
     let histHTML = '';
@@ -609,25 +615,23 @@ function renderPerfiles() {
       histHTML = `<div class="history-section"><div class="history-title">Monthly report</div>
         <table class="history-table">
           <tr><th>Month</th><th style="color:var(--green);">P</th><th style="color:var(--blue);">R</th><th style="color:var(--amber);">J</th><th style="color:var(--red);">F</th><th>%</th></tr>`;
-      allMks.forEach(mk => {
-        const [y,m] = mk.split('-').map(Number);
-        const days  = getWorkdays(y, m-1);
-        const att   = ((state.attendance[mk])||{})[emp] || {};
-        const justifs = ((state.justifications[mk])||{})[emp] || [];
+      allMks.forEach(mkey => {
+        const [y,m] = mkey.split('-').map(Number);
+        const days2   = workdays(y, m-1);
+        const att2    = ((state.attendance[mkey])||{})[emp] || {};
+        const justifs = ((state.justifications[mkey])||{})[emp] || [];
         let pres=0,rem=0,ausen=0,just=0;
-        days.forEach(d => {
-          const st = att[d.toISOString().slice(0,10)];
-          if (st==='presente') pres++;
-          else if (st==='remoto') rem++;
-          else if (st==='ausente') ausen++;
-          else if (st==='justificado') just++;
+        days2.forEach(d => {
+          const st = att2[d.toISOString().slice(0,10)];
+          if (st==='presente') pres++; else if (st==='remoto') rem++;
+          else if (st==='ausente') ausen++; else if (st==='justificado') just++;
         });
-        const total  = pres+just;
-        const pct    = Math.round((total/T)*100);
-        const pctCol = total>=T?'var(--green)':total>=Math.round(T*0.7)?'var(--amber)':'var(--red)';
-        const pctBg  = total>=T?'var(--green-bg)':total>=Math.round(T*0.7)?'var(--amber-bg)':'var(--red-bg)';
+        const total = pres+just;
+        const pct   = Math.round((total/empT)*100);
+        const pctCol = total>=empT?'var(--green)':total>=Math.round(empT*0.7)?'var(--amber)':'var(--red)';
+        const pctBg  = total>=empT?'var(--green-bg)':total>=Math.round(empT*0.7)?'var(--amber-bg)':'var(--red-bg)';
         histHTML += `<tr>
-          <td style="font-weight:500;">${MONTHS_EN[m-1]} ${y}</td>
+          <td style="font-weight:500;">${MONTHS[m-1]} ${y}</td>
           <td style="color:var(--green);font-weight:500;">${pres}</td>
           <td style="color:var(--blue);">${rem}</td>
           <td style="color:var(--amber);">${just}</td>
@@ -635,87 +639,74 @@ function renderPerfiles() {
           <td><span class="pct-pill" style="background:${pctBg};color:${pctCol};">${pct}%</span></td>
         </tr>`;
         justifs.forEach(j => {
-          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Recuperó':''}</td></tr>`;
+          histHTML += `<tr><td colspan="2" style="padding-left:16px;color:var(--txt2);font-style:italic;background:var(--amber-bg);">${j.date}</td><td colspan="4" style="color:var(--amber);background:var(--amber-bg);">${j.motivo}${j.recupero?' · ✓ Compensated':''}</td></tr>`;
         });
       });
       histHTML += '</table></div>';
     }
-
-    const horario       = sc.timeStart&&sc.timeEnd ? `${sc.timeStart} – ${sc.timeEnd}` : 'Not set';
-    const validDays = ['Mon','Tue','Wed','Thu','Fri'];  const cleanDays = sc.days.filter(d => validDays.includes(d));  const diasAcordados = cleanDays.length > 0    ? cleanDays.join(', ')   : 'Not set';
+    const VDAYS = ['Mon','Tue','Wed','Thu','Fri'];
+    const horario = sc.timeStart&&sc.timeEnd ? `${sc.timeStart} – ${sc.timeEnd}` : 'Not set';
+    const agreed  = (sc.days||[]).filter(d=>VDAYS.includes(d)).join(', ') || 'Not set';
 
     html += `<div class="profile-card">
       <div class="profile-header">
-        <div class="emp-avatar" style="width:44px;height:44px;font-size:15px;background:var(--${col}-bg);color:var(--${col});">${ini}</div>
+        <div class="emp-avatar" style="width:44px;height:44px;font-size:15px;background:var(--${col}-bg);color:var(--${col});">${ini(emp)}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:15px;color:var(--txt);">${emp}</div>
-          <div style="font-size:11px;color:var(--txt2);">${horario} · ${diasAcordados}</div>
+          <div style="font-size:11px;color:var(--txt2);">${horario} · ${agreed}</div>
         </div>
       </div>
       <div class="profile-body">
-        <div class="profile-field"><label>Key Number</label><input type="text" value="${pr.keyNumber||''}" placeholder="Ej: EMP-001" onchange="updateProfile('${esc(emp)}','keyNumber',this.value)"></div>
+        <div class="profile-field"><label>Key Number</label><input type="text" value="${pr.keyNumber||''}" placeholder="e.g. EMP-001" onchange="updateProfile('${esc(emp)}','keyNumber',this.value)"></div>
         <div class="profile-field"><label>Notes</label><input type="text" value="${pr.notes||''}" placeholder="Notes..." onchange="updateProfile('${esc(emp)}','notes',this.value)"></div>
       </div>
       ${histHTML}
     </div>`;
   });
-  document.getElementById('profile-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No employees</p>';
+  document.getElementById('profile-cards').innerHTML = html || '<p style="color:var(--txt2);font-size:13px;">No employees loaded.</p>';
 }
 
-window.updateProfile = function(emp, field, val) {
+window.updateProfile = (emp, field, val) => {
   if (!state.profiles[emp]) state.profiles[emp] = {};
-  state.profiles[emp][field] = val;
-  saveState();
+  state.profiles[emp][field] = val; saveState();
 };
 
-// ── Empleados ────────────────────────────────────────────────────
-window.addEmployee = function() {
+// ── Employee management ───────────────────────────────────────────
+window.addEmployee = () => {
   const input = document.getElementById('new-emp-name');
   const name  = input.value.trim();
   if (!name || state.employees.includes(name)) return;
-  state.employees.push(name);
-  input.value = '';
+  state.employees.push(name); input.value = '';
   saveState(); renderAll();
 };
-
-window.removeEmployee = function(emp) {
-  if (!confirm(`¿Eliminar a ${emp}?`)) return;
+window.removeEmployee = emp => {
+  if (!confirm(`Remove ${emp}?`)) return;
   state.employees = state.employees.filter(e=>e!==emp);
   saveState(); renderAll();
 };
-
-window.changeMonth = function(dir) {
+window.changeMonth = dir => {
   state.currentMonth += dir;
   if (state.currentMonth<0)  { state.currentMonth=11; state.currentYear--;  }
   if (state.currentMonth>11) { state.currentMonth=0;  state.currentYear++;  }
   saveState(); renderRegistro();
 };
-
-window.changeMonthOv = function(dir) {
+window.changeMonthOv = dir => {
   state.overviewMonth += dir;
   if (state.overviewMonth<0)  { state.overviewMonth=11; state.overviewYear--;  }
   if (state.overviewMonth>11) { state.overviewMonth=0;  state.overviewYear++;  }
   saveState(); renderOverview();
 };
-
-window.updateTarget = function(val) {
-  state.target = parseInt(val)||12;
-  saveState(); renderRegistro();
-};
-
-window.newMonth = function() {
-  const mk = monthKey(state.currentYear, state.currentMonth);
-  if (!state.attendance[mk])    state.attendance[mk] = {};
-  if (!state.justifications[mk]) state.justifications[mk] = {};
+window.newMonth = () => {
+  const key = mk(state.currentYear, state.currentMonth);
+  if (!state.attendance[key])    state.attendance[key] = {};
+  if (!state.justifications[key]) state.justifications[key] = {};
   state.employees.forEach(emp => {
-  const T = state.targets[emp] || 12;
-    if (!state.attendance[mk][emp])    state.attendance[mk][emp] = {};
-    if (!state.justifications[mk][emp]) state.justifications[mk][emp] = [];
+    if (!state.attendance[key][emp])    state.attendance[key][emp] = {};
+    if (!state.justifications[key][emp]) state.justifications[key][emp] = [];
   });
   saveState(); renderRegistro();
 };
-
-window.showTab = function(tab, btn) {
+window.showTab = (tab, btn) => {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   btn.classList.add('active');
@@ -724,7 +715,6 @@ window.showTab = function(tab, btn) {
   if (tab==='horarios') renderSchedule();
   if (tab==='perfiles') renderPerfiles();
 };
-
 function renderAll() {
   renderRegistro();
   if (document.getElementById('tab-overview').classList.contains('active')) renderOverview();
@@ -732,150 +722,245 @@ function renderAll() {
   if (document.getElementById('tab-perfiles').classList.contains('active')) renderPerfiles();
 }
 
-// ── Init ─────────────────────────────────────────────────────────
-window.startApp = startListener;
+// ── CSV Import ────────────────────────────────────────────────────
+let csvRows = [], csvHeaders = [];
 
-// ── Export to Excel ──────────────────────────────────────────────
-window.exportExcel = function() {
-  if (typeof XLSX === 'undefined') {
-    alert('Excel library not loaded yet, please try again in a moment.');
+window.openImport = () => {
+  csvRows = []; csvHeaders = [];
+  document.getElementById('csv-input').value = '';
+  ['imp-s1','imp-s2','imp-s3'].forEach((id,i) =>
+    document.getElementById(id).style.display = i===0 ? 'block' : 'none'
+  );
+  showErr('imp-err1','');
+  document.getElementById('import-modal').style.display = 'flex';
+  const dz = document.getElementById('dropzone');
+  dz.ondragover  = e => { e.preventDefault(); dz.style.borderColor='var(--blue)'; };
+  dz.ondragleave = () => { dz.style.borderColor=''; };
+  dz.ondrop      = e => { e.preventDefault(); dz.style.borderColor=''; if(e.dataTransfer.files[0]) csvStep1(e.dataTransfer.files[0]); };
+};
+
+window.closeImport = () => { document.getElementById('import-modal').style.display = 'none'; };
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.style.display = msg ? 'block' : 'none';
+}
+
+window.csvStep1 = file => {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = parseCSV(e.target.result);
+      if (parsed.length < 2) throw new Error('File appears empty.');
+      csvHeaders = parsed[0];
+      csvRows = parsed.slice(1)
+        .map(r => { const o={}; csvHeaders.forEach((h,i)=>{ o[h]=(r[i]||'').trim(); }); return o; })
+        .filter(r => Object.values(r).some(v=>v!==''));
+
+      const nameEl = document.getElementById('col-name');
+      const dateEl = document.getElementById('col-date');
+      nameEl.innerHTML = csvHeaders.map(h=>`<option value="${h}">${h}</option>`).join('');
+      dateEl.innerHTML = csvHeaders.map(h=>`<option value="${h}">${h}</option>`).join('');
+
+      // auto-guess
+      const ng = csvHeaders.find(h=>/name|nombre|person|employee|emp/i.test(h));
+      const dg = csvHeaders.find(h=>/date|fecha|day|dia/i.test(h));
+      if (ng) nameEl.value = ng;
+      if (dg) dateEl.value = dg;
+
+      document.getElementById('imp-rowcount').textContent = csvRows.length;
+      renderPreview();
+      document.getElementById('imp-s1').style.display = 'none';
+      document.getElementById('imp-s2').style.display = 'block';
+    } catch(err) { showErr('imp-err1', 'Could not parse: ' + err.message); }
+  };
+  reader.readAsText(file);
+};
+
+function parseCSV(text) {
+  const delim = text.split(';').length > text.split(',').length ? ';' : ',';
+  return text.trim().split(/\r?\n/).map(line => {
+    const row = []; let cur = '', inQ = false;
+    for (const c of line) {
+      if (c==='"') inQ=!inQ;
+      else if (c===delim && !inQ) { row.push(cur); cur=''; }
+      else cur+=c;
+    }
+    row.push(cur);
+    return row.map(s=>s.replace(/^"|"$/g,'').trim());
+  });
+}
+
+window.renderPreview = () => {
+  const nc = document.getElementById('col-name').value;
+  const dc = document.getElementById('col-date').value;
+  const rows = csvRows.slice(0,5);
+  let html = `<table><tr>${csvHeaders.map(h=>`<th style="${h===nc||h===dc?'color:var(--blue);':''}">${h}${h===nc?' 👤':h===dc?' 📅':''}</th>`).join('')}</tr>`;
+  rows.forEach(r => { html += `<tr>${csvHeaders.map(h=>`<td>${r[h]||''}</td>`).join('')}</tr>`; });
+  html += '</table>';
+  document.getElementById('imp-preview').innerHTML = html;
+};
+
+function parseDate(str, fmt) {
+  str = (str||'').trim().split(' ')[0].split('T')[0];
+  if (!str) return null;
+  let d,m,y;
+  if (fmt==='auto') {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str))      [y,m,d]=str.split('-').map(Number);
+    else if (/^\d{2}\/\d{2}\/\d{4}$/.test(str)) [d,m,y]=str.split('/').map(Number);
+    else if (/^\d{2}-\d{2}-\d{4}$/.test(str))   [d,m,y]=str.split('-').map(Number);
+    else return null;
+  } else if (fmt==='yyyy-mm-dd') [y,m,d]=str.split('-').map(Number);
+  else if (fmt==='dd/mm/yyyy')   [d,m,y]=str.split('/').map(Number);
+  else if (fmt==='mm/dd/yyyy')   [m,d,y]=str.split('/').map(Number);
+  else if (fmt==='dd-mm-yyyy')   [d,m,y]=str.split('-').map(Number);
+  if (!d||!m||!y) return null;
+  const dt = new Date(y,m-1,d);
+  return isNaN(dt) ? null : dt.toISOString().slice(0,10);
+}
+
+// Normalize name for fuzzy matching: lowercase, remove punctuation & extra spaces
+function normName(s) { return (s||'').toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/,' ').trim(); }
+
+window.runImport = () => {
+  showErr('imp-err2','');
+  const nameCol = document.getElementById('col-name').value;
+  const dateCol = document.getElementById('col-date').value;
+  const fmt     = document.getElementById('date-fmt').value;
+
+  // Build normalized name → employee map
+  const nameMap = {};
+  state.employees.forEach(emp => { nameMap[normName(emp)] = emp; });
+
+  if (state.employees.length === 0) {
+    showErr('imp-err2','No employees in the system. Add employees first in the Daily Log tab.');
     return;
   }
 
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const WD     = ['Mon','Tue','Wed','Thu','Fri'];
+  const mkey = mk(state.currentYear, state.currentMonth);
+  if (!state.attendance[mkey]) state.attendance[mkey] = {};
 
-  // Export the month currently shown in the Daily Log tab
-  const y  = state.currentYear;
-  const m  = state.currentMonth;
-  const mk = monthKey(y, m);
-  const monthLabel = `${MONTHS[m]} ${y}`;
+  let matched=0, skipped=0, wrongMonth=0, unmatched=new Set();
 
-  const wb = XLSX.utils.book_new();
+  csvRows.forEach(row => {
+    const rawName = (row[nameCol]||'').trim();
+    const rawDate = (row[dateCol]||'').trim();
+    const ds      = parseDate(rawDate, fmt);
 
-  // ── SHEET 1: Daily Log — full day-by-day grid ────────────────
-  const workdays = getWorkdays(y, m);
-  const dayHeaders = workdays.map(d => `${WD[d.getDay()-1]} ${d.getDate()}`);
+    if (!ds) { skipped++; return; }
 
-  // Build week-group header row (Week 1, Week 2, …)
-  const weekRow = [''];
-  let lastWk = null;
-  workdays.forEach(d => {
-    const wn = getWeekNum(d);
-    weekRow.push(wn !== lastWk ? `Week ${wn}` : '');
-    lastWk = wn;
-  });
-  weekRow.push('', '', '', '', '', '');
+    // Check month
+    const [ry,rm] = ds.split('-').map(Number);
+    if (ry!==state.currentYear || rm!==state.currentMonth+1) { wrongMonth++; return; }
 
-  const colHeader = ['Employee', ...dayHeaders, 'Present', 'Remote', 'Justified', 'Absent', 'Total (P+J)', '% vs Target'];
+    // Match by normalized full name OR last name match
+    const norm     = normName(rawName);
+    let emp = nameMap[norm];
 
-  const dataRows1 = state.employees.map(emp => {
-    const T   = state.targets[emp] || 12;
-    const att = ((state.attendance[mk] || {})[emp]) || {};
-    let pres = 0, rem = 0, just = 0, aus = 0;
-
-    const dayCells = workdays.map(d => {
-      const st = att[d.toISOString().slice(0, 10)] || '';
-      if (st === 'presente')         pres++;
-      else if (st === 'remoto')      rem++;
-      else if (st === 'justificado') just++;
-      else if (st === 'ausente')     aus++;
-      const map = { presente: 'Present', remoto: 'Remote', justificado: 'Justified', ausente: 'Absent', '': '' };
-      return map[st] !== undefined ? map[st] : '';
-    });
-
-    const total = pres + just;
-    const pct   = T > 0 ? Math.round((total / T) * 100) + '%' : '-';
-    return [emp, ...dayCells, pres, rem, just, aus, total, pct];
-  });
-
-  const ws1 = XLSX.utils.aoa_to_sheet([weekRow, colHeader, ...dataRows1]);
-  ws1['!cols'] = [{ wch: 22 }, ...workdays.map(() => ({ wch: 8 })), { wch: 9 }, { wch: 9 }, { wch: 11 }, { wch: 9 }, { wch: 13 }, { wch: 13 }];
-  XLSX.utils.book_append_sheet(wb, ws1, monthLabel);
-
-  // ── SHEET 2: Monthly Summary — one row per employee ──────────
-  // Includes totals AND a justification block below each employee
-  const summaryRows = [];
-
-  // Title
-  summaryRows.push([`Monthly Summary — ${monthLabel}`]);
-  summaryRows.push([]);
-
-  // Stats table header
-  summaryRows.push(['Employee', 'Target', 'Present', 'Remote', 'Justified', 'Absent', 'Total (P+J)', '% Attendance', 'Met Target?', 'Agreed Days', 'Schedule']);
-
-  state.employees.forEach(emp => {
-    const T       = state.targets[emp] || 12;
-    const att     = ((state.attendance[mk] || {})[emp]) || {};
-    const justifs = ((state.justifications[mk] || {})[emp]) || [];
-    const sc      = state.schedule[emp] || {};
-
-    let pres = 0, rem = 0, just = 0, aus = 0;
-    workdays.forEach(d => {
-      const st = att[d.toISOString().slice(0, 10)] || '';
-      if (st === 'presente')         pres++;
-      else if (st === 'remoto')      rem++;
-      else if (st === 'justificado') just++;
-      else if (st === 'ausente')     aus++;
-    });
-
-    const total     = pres + just;
-    const pct       = T > 0 ? Math.round((total / T) * 100) + '%' : '-';
-    const metTarget = total >= T ? 'YES ✓' : 'NO ✗';
-    const validDays = ['Mon','Tue','Wed','Thu','Fri'];
-    const agreedDays = (sc.days || []).filter(d => validDays.includes(d)).join(', ') || '-';
-    const schedule   = (sc.timeStart && sc.timeEnd) ? `${sc.timeStart} – ${sc.timeEnd}` : '-';
-
-    // Main stats row
-    summaryRows.push([emp, T, pres, rem, just, aus, total, pct, metTarget, agreedDays, schedule]);
-
-    // Absence detail rows
-    const absentDays = workdays.filter(d => {
-      const st = att[d.toISOString().slice(0, 10)] || '';
-      return st === 'ausente' || st === 'justificado';
-    });
-
-    if (absentDays.length > 0) {
-      summaryRows.push(['', 'Date', 'Status', 'Justification', 'Made up?', '', '', '', '', '', '']);
-      absentDays.forEach(d => {
-        const ds  = d.toISOString().slice(0, 10);
-        const st  = att[ds];
-        const label = st === 'justificado' ? 'Justified' : 'Absent';
-        // Find matching justification by date string (loose match)
-        const dayStr = `${WD[d.getDay()-1]} ${d.getDate()}`;
-        const match  = justifs.find(j => j.date && (j.date.includes(String(d.getDate())) || j.date === dayStr));
-        const reason = match ? match.motivo : '-';
-        const madeUp = match ? (match.recupero ? 'Yes' : 'No') : '-';
-        summaryRows.push(['', dayStr, label, reason, madeUp, '', '', '', '', '', '']);
-      });
+    // If no exact match, try last-name-first partial match
+    if (!emp) {
+      const keys = Object.keys(nameMap);
+      // "Doe, John" → try matching employee "John Doe" or "Doe, John"
+      const parts = norm.split(/[,\s]+/).filter(Boolean);
+      emp = keys.find(k => {
+        const kparts = k.split(/[,\s]+/).filter(Boolean);
+        return parts.every(p => kparts.includes(p)) || kparts.every(p => parts.includes(p));
+      })
+        ? nameMap[keys.find(k => {
+            const kparts = k.split(/[,\s]+/).filter(Boolean);
+            return parts.every(p => kparts.includes(p)) || kparts.every(p => parts.includes(p));
+          })]
+        : null;
     }
 
-    // Justifications that were entered manually (may cover any date)
-    const extraJustifs = justifs.filter(j => {
-      const dayNum = absentDays.find(d => {
-        const dayStr = `${WD[d.getDay()-1]} ${d.getDate()}`;
-        return j.date === dayStr || (j.date && j.date.includes(String(d.getDate())));
-      });
-      return !dayNum; // not already shown above
-    });
+    if (!emp) { if (rawName) unmatched.add(rawName); skipped++; return; }
 
-    if (extraJustifs.length > 0) {
-      summaryRows.push(['', '— Additional notes —', '', '', '', '', '', '', '', '', '']);
-      extraJustifs.forEach(j => {
-        summaryRows.push(['', j.date || '-', '-', j.motivo, j.recupero ? 'Yes' : 'No', '', '', '', '', '', '']);
-      });
+    if (!state.attendance[mkey][emp]) state.attendance[mkey][emp] = {};
+    const cur = state.attendance[mkey][emp][ds] || 'none';
+    if (cur==='none' || cur==='ausente') {
+      state.attendance[mkey][emp][ds] = 'presente';
+      matched++;
     }
-
-    summaryRows.push([]); // blank row between employees
   });
 
-  const ws2 = XLSX.utils.aoa_to_sheet(summaryRows);
-  ws2['!cols'] = [{ wch: 22 }, { wch: 8 }, { wch: 9 }, { wch: 9 }, { wch: 11 }, { wch: 9 }, { wch: 13 }, { wch: 13 }, { wch: 12 }, { wch: 20 }, { wch: 16 }];
-  XLSX.utils.book_append_sheet(wb, ws2, `Summary ${monthLabel}`);
+  saveState();
+  renderRegistro();
 
-  // ── Download ─────────────────────────────────────────────────
-  XLSX.writeFile(wb, `attendance_${MONTHS[m]}_${y}.xlsx`);
+  let html = `<div class="result-box result-green">✓ ${matched} days marked as Present</div>`;
+  if (wrongMonth>0) html += `<div class="result-box result-muted">📅 ${wrongMonth} rows skipped — date not in ${MONTHS[state.currentMonth]} ${state.currentYear}</div>`;
+  if (skipped>0)    html += `<div class="result-box result-muted">⚠ ${skipped} rows skipped (bad date or no name match)</div>`;
+  if (unmatched.size>0) html += `<div class="result-box result-amber">🔍 Names not found in employee list:<br><span style="font-size:11px;">${[...unmatched].join(', ')}</span><br><span style="font-size:11px;margin-top:4px;display:block;">Tip: make sure employee names in the app match the names in the CSV.</span></div>`;
+  html += `<p style="font-size:12px;color:var(--txt2);margin-top:8px;">Existing states (Remote, Justified) were not overwritten.</p>`;
+
+  document.getElementById('imp-results').innerHTML = html;
+  document.getElementById('imp-s2').style.display = 'none';
+  document.getElementById('imp-s3').style.display = 'block';
 };
+
+// ── Export Excel ──────────────────────────────────────────────────
+window.exportExcel = () => {
+  if (typeof XLSX === 'undefined') { alert('Excel library loading, try again.'); return; }
+  const y=state.currentYear, m=state.currentMonth, mkey=mk(y,m);
+  const days=workdays(y,m), monthLabel=`${MONTHS[m]} ${y}`;
+  const wb=XLSX.utils.book_new();
+
+  // Sheet 1: daily grid
+  let lastWk=null;
+  const wkRow=[''];
+  days.forEach(d=>{ const wn=weekNum(d); wkRow.push(wn!==lastWk?`Week ${wn}`:''); lastWk=wn; });
+  wkRow.push('','','','','');
+  const hdr1=['Employee',...days.map(d=>`${WD[d.getDay()-1]} ${d.getDate()}`),'Present','Remote','Justified','Absent','Total (P+J)','% vs Target'];
+  const data1=state.employees.map(emp=>{
+    const T=state.targets[emp]||12, att=((state.attendance[mkey]||{})[emp])||{};
+    let p=0,r=0,j=0,a=0;
+    const dc=days.map(d=>{
+      const st=att[d.toISOString().slice(0,10)]||'';
+      if(st==='presente')p++; else if(st==='remoto')r++; else if(st==='justificado')j++; else if(st==='ausente')a++;
+      return {presente:'Present',remoto:'Remote',justificado:'Justified',ausente:'Absent','':''}[st]||'';
+    });
+    return [emp,...dc,p,r,j,a,p+j,T>0?Math.round(((p+j)/T)*100)+'%':'-'];
+  });
+  const ws1=XLSX.utils.aoa_to_sheet([wkRow,hdr1,...data1]);
+  ws1['!cols']=[{wch:22},...days.map(()=>({wch:8})),{wch:9},{wch:9},{wch:11},{wch:9},{wch:13},{wch:13}];
+  XLSX.utils.book_append_sheet(wb,ws1,monthLabel);
+
+  // Sheet 2: summary with justifications
+  const srows=[[`Monthly Summary — ${monthLabel}`],[]];
+  srows.push(['Employee','Target','Present','Remote','Justified','Absent','Total (P+J)','% Attendance','Met Target?','Agreed Days','Schedule']);
+  state.employees.forEach(emp=>{
+    const T=state.targets[emp]||12, att=((state.attendance[mkey]||{})[emp])||{}, justifs=((state.justifications[mkey]||{})[emp])||[], sc=state.schedule[emp]||{};
+    let p=0,r=0,j=0,a=0;
+    const absDays=[];
+    days.forEach(d=>{ const st=att[d.toISOString().slice(0,10)];
+      if(st==='presente')p++; else if(st==='remoto')r++;
+      else if(st==='ausente'){a++;absDays.push(d);}
+      else if(st==='justificado'){j++;absDays.push(d);}
+    });
+    const tot=p+j, pct=T>0?Math.round((tot/T)*100)+'%':'-';
+    const agreed=(sc.days||[]).filter(d=>['Mon','Tue','Wed','Thu','Fri'].includes(d)).join(', ')||'-';
+    const sched=sc.timeStart&&sc.timeEnd?`${sc.timeStart} – ${sc.timeEnd}`:'-';
+    srows.push([emp,T,p,r,j,a,tot,pct,tot>=T?'YES ✓':'NO ✗',agreed,sched]);
+    if(absDays.length>0){
+      srows.push(['','Date','Status','Justification','Made up?','','','','','','']);
+      absDays.forEach(d=>{
+        const ds=d.toISOString().slice(0,10), st=att[ds], lbl=st==='justificado'?'Justified':'Absent';
+        const dayStr=`${WD[d.getDay()-1]} ${d.getDate()}`;
+        const match=justifs.find(jj=>jj.date&&(jj.date.includes(String(d.getDate()))||jj.date===dayStr));
+        srows.push(['',dayStr,lbl,match?match.motivo:'-',match?(match.recupero?'Yes':'No'):'-','','','','','','']);
+      });
+    }
+    const extra=justifs.filter(jj=>!absDays.find(d=>{ const ds=`${WD[d.getDay()-1]} ${d.getDate()}`; return jj.date===ds||jj.date.includes(String(d.getDate())); }));
+    if(extra.length>0){ srows.push(['','— Additional notes —','','','','','','','','','']); extra.forEach(jj=>srows.push(['',jj.date||'-','-',jj.motivo,jj.recupero?'Yes':'No','','','','','',''])); }
+    srows.push([]);
+  });
+  const ws2=XLSX.utils.aoa_to_sheet(srows);
+  ws2['!cols']=[{wch:22},{wch:8},{wch:9},{wch:9},{wch:11},{wch:9},{wch:13},{wch:13},{wch:12},{wch:20},{wch:16}];
+  XLSX.utils.book_append_sheet(wb,ws2,`Summary ${monthLabel}`);
+  XLSX.writeFile(wb,`attendance_${MONTHS[m]}_${y}.xlsx`);
+};
+
+window.startApp = startListener;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </body>
